@@ -7,6 +7,7 @@ Filing Cabinet is the governed project for Filing Cabinet, a local-first Windows
 ## Governance
 
 - [Filing Cabinet.manifest.toml](Filing%20Cabinet.manifest.toml)
+- [Project proposal](Project-Proposal.md)
 - [AGENTS.md](AGENTS.md)
 - [User and operator README](README.md)
 - [Desktop Application Release Standard](D:/.library/aptlantis_core/DRS/README.md)
@@ -14,7 +15,7 @@ Filing Cabinet is the governed project for Filing Cabinet, a local-first Windows
 
 ## Current state
 
-Version `0.1.1` is the active governed stable release line. The prior v1.x installer train is retained as pre-standard historical evidence and no longer acts as current release authority.
+Version `0.1.2` is the active Store MSIX candidate line. The prior v1.x installer train is retained as pre-standard historical evidence and no longer acts as current release authority.
 
 The forward public Windows release path is MSIX submitted through the Microsoft Store, where the Store signs the public package. The first Store product identity is reserved as **Filing Cabinet**:
 
@@ -28,16 +29,16 @@ Aptlantis.FilingCabinet_0.1.2.0_x64.msix has been accepted by Partner Center pac
 
 Current Store candidate evidence:
 
-- MSIX package: `Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
-- ARHS hash manifest: `FilingCabinet-0.1.2.0.hashmanifest.toml`
-- Detached PGP signature: `FilingCabinet-0.1.2.0.hashmanifest.toml.asc`
-- Detached SLH-DSA signature: `FilingCabinet-0.1.2.0.hashmanifest.toml.sphincs`
+- MSIX package: `trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
+- ARHS hash manifest: `trust/FileCabinet-0.1.2.0.hashmanifest.toml`
+- Detached PGP signature: `trust/FileCabinet-0.1.2.0.hashmanifest.toml.asc`
+- Detached SLH-DSA signature: `trust/FileCabinet-0.1.2.0.hashmanifest.toml.sphincs`
 
 The detached PGP and SLH-DSA files sign the hash manifest for preservation/provenance evidence. They do not replace Microsoft Store signing for the public MSIX distribution.
 
 The v0.1.0 local release was verified on 2026-08-04 with source build, 104 passing tests, WiX MSI packaging, SHA-256 hashing, unsigned Authenticode status, and launch verification from the published executable. The MSI lifecycle was later verified on 2026-08-17 with quiet install, shell integration checks, installed CLI version, installed WPF launch, installed documentation payload, and quiet uninstall cleanup. That MSI record remains historical/local direct-distribution evidence.
 
-The project is licensed under the MIT License. The current Store MSIX candidate has a dedicated hash manifest at `FilingCabinet-0.1.2.0.hashmanifest.toml`. The historical MSI artifact has a separate hash manifest at `artifacts/installer/FilingCabinet_msi-0.1.2.0.hashmanifest.toml`, with a source documentation copy at `docs/Filing Cabinet - Installer Hash Manifest.md`.
+The project is licensed under the MIT License. The current Store MSIX candidate has a dedicated hash manifest at `trust/FileCabinet-0.1.2.0.hashmanifest.toml`. The historical MSI artifact remains `artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi` with hash manifest `artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml`; no v0.1.2 MSI artifact is recorded.
 
 Governance and product-facing records use **Filing Cabinet**. Compact `FilingCabinet` identifiers remain where Windows, .NET, package identity, executable naming, artifact filenames, or repository slugs should not contain spaces.
 
