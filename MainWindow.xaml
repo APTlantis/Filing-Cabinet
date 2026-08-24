@@ -713,16 +713,20 @@
                                     <TextBlock Text="Vault Health" Foreground="{StaticResource Atl.Brush.Success}" FontSize="18" FontWeight="SemiBold" />
                                     <TextBlock Text="{Binding VaultHealthSummary}" Style="{StaticResource DataCell}" Margin="0,6,0,0" />
                                     <TextBlock Text="{Binding VaultHealthBreakdown}" Style="{StaticResource SmallLabel}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                                    <TextBlock Text="{Binding VaultHealthWorkflowText}" Style="{StaticResource DataCell}" TextWrapping="Wrap" Margin="0,8,0,0" />
                                     <TextBlock Text="{Binding VaultMaintenanceStatus}" Style="{StaticResource SmallLabel}" Margin="0,8,0,0" />
                                     <TextBlock Text="{Binding VaultMaintenanceDetail}" Style="{StaticResource SmallLabel}" TextWrapping="Wrap" Margin="0,3,0,0" />
                                     <ProgressBar Height="7" Minimum="0" Maximum="100" Value="{Binding VaultMaintenanceProgress, Mode=OneWay}" Margin="0,8,0,0" />
                                 </StackPanel>
-                                <WrapPanel Grid.Column="1" HorizontalAlignment="Right" MaxWidth="460" Margin="16,0,0,0">
-                                    <Button Content="Analyze Health" Command="{Binding RepairCatalogCommand}" ToolTip="Run fast metadata-first health analysis without reading large retained files." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
-                                    <Button Content="Verify small hashes" Command="{Binding VerifySmallHashesCommand}" ToolTip="Verify existing hashes for retained files up to 1 GB." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
-                                    <Button Content="Full Rescan &amp; Orphan Recovery" Command="{Binding RescanVaultCommand}" ToolTip="Refresh generated assets, adopt recoverable orphan files, then run health analysis." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
-                                    <Button Content="Apply Selected Repairs" Click="ApplyRepairCandidatesButton_Click" ToolTip="Apply selected automatic repairs after confirmation." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
-                                </WrapPanel>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right" MaxWidth="460" Margin="16,0,0,0">
+                                    <WrapPanel HorizontalAlignment="Right">
+                                        <Button Content="Analyze Health" Command="{Binding RepairCatalogCommand}" ToolTip="Run fast metadata-first health analysis without reading large retained files." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
+                                        <Button Content="Verify small hashes" Command="{Binding VerifySmallHashesCommand}" ToolTip="Verify existing hashes for retained files up to 1 GB." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
+                                        <Button Content="Full Rescan &amp; Orphan Recovery" Command="{Binding RescanVaultCommand}" ToolTip="Refresh generated assets, adopt recoverable orphan files, then run health analysis." Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
+                                        <Button Content="Apply Selected Repairs" Click="ApplyRepairCandidatesButton_Click" IsEnabled="{Binding CanApplySelectedRepairCandidates}" ToolTip="{Binding RepairActionAvailabilityText}" Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
+                                    </WrapPanel>
+                                    <TextBlock Text="{Binding RepairActionAvailabilityText}" Style="{StaticResource SmallLabel}" TextWrapping="Wrap" TextAlignment="Right" Margin="0,2,8,0" />
+                                </StackPanel>
                             </Grid>
                         </Border>
 
@@ -790,7 +794,7 @@
                                 </TabItem>
                                 <TabItem Header="Repairs">
                                     <Grid Margin="8,12,8,8">
-                                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
                                         <WrapPanel Margin="0,0,0,10">
                                             <Button Content="Select safe automatic" Command="{Binding SelectSafeRepairCandidatesCommand}" Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
                                             <Button Content="Select visible" Command="{Binding SelectVisibleRepairCandidatesCommand}" Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
@@ -801,14 +805,20 @@
                                             <Button Content="Select RebindPath" Command="{Binding SelectRepairActionCommand}" CommandParameter="RebindPath" Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
                                             <Button Content="Clear all" Command="{Binding ClearRepairSelectionCommand}" Style="{StaticResource ToolButton}" Height="30" Margin="0,0,8,8" />
                                         </WrapPanel>
-                                        <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredRepairCandidates}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="False">
+                                        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                                            <TextBlock Text="{Binding SelectedRepairSummary}" Style="{StaticResource DataCell}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding RepairActionAvailabilityText}" Style="{StaticResource SmallLabel}" TextWrapping="Wrap" Margin="0,3,0,0" />
+                                        </StackPanel>
+                                        <DataGrid Grid.Row="2" ItemsSource="{Binding FilteredRepairCandidates}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="False">
                                             <DataGrid.Columns>
-                                                <DataGridTemplateColumn Header="Apply" Width="58"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanRepairAutomatically}" HorizontalAlignment="Center" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+                                                <DataGridTemplateColumn Header="Apply" Width="58"><DataGridTemplateColumn.CellTemplate><DataTemplate><CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanRepairAutomatically}" ToolTip="{Binding SelectionHelp}" HorizontalAlignment="Center" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
                                                 <DataGridTextColumn Header="Group" Binding="{Binding RepairGroup}" Width="140" IsReadOnly="True" />
                                                 <DataGridTextColumn Header="Action" Binding="{Binding ActionType}" Width="130" IsReadOnly="True" />
                                                 <DataGridTextColumn Header="Type" Binding="{Binding FindingType}" Width="150" IsReadOnly="True" />
                                                 <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="*" IsReadOnly="True" />
-                                                <DataGridTextColumn Header="State" Binding="{Binding SelectionState}" Width="170" IsReadOnly="True" />
+                                                <DataGridTextColumn Header="Impact" Binding="{Binding RepairImpact}" Width="150" IsReadOnly="True" />
+                                                <DataGridTextColumn Header="State" Binding="{Binding SelectionState}" Width="190" IsReadOnly="True" />
+                                                <DataGridTextColumn Header="Why" Binding="{Binding ActionExplanation}" Width="320" IsReadOnly="True" />
                                             </DataGrid.Columns>
                                         </DataGrid>
                                     </Grid>
@@ -1431,6 +1441,46 @@
                                         <TextBlock Text="Original" Style="{StaticResource SmallLabel}" />
                                         <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.OriginalPath}" Style="{StaticResource DataCell}" FontSize="12" TextWrapping="Wrap" />
                                     </Grid>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="62" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="Capture" Style="{StaticResource SmallLabel}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.CaptureSummary}" Style="{StaticResource DataCell}" FontSize="12" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="62" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="Parents" Style="{StaticResource SmallLabel}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.SourceParentSnapshotText}" Style="{StaticResource DataCell}" FontSize="12" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="62" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="Channel" Style="{StaticResource SmallLabel}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.AcquisitionChannel}" Style="{StaticResource DataCell}" FontSize="12" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="62" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="Family" Style="{StaticResource SmallLabel}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.DetectedFamily}" Style="{StaticResource DataCell}" FontSize="12" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,18">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="62" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="Ext" Style="{StaticResource SmallLabel}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.OriginalExtension}" Style="{StaticResource DataCell}" FontSize="12" />
+                                    </Grid>
+                                    <TextBlock Text="Capture siblings" Style="{StaticResource SmallLabel}" Margin="0,0,0,8" />
+                                    <ItemsControl ItemsSource="{Binding SelectedArtifact.SiblingNames}" Margin="0,0,0,14">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Style="{StaticResource Chip}">
+                                                    <TextBlock Text="{Binding}" Foreground="{StaticResource SecondaryTextBrush}" FontSize="12" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
 
                                     <TextBlock Text="Tags" Style="{StaticResource SmallLabel}" Margin="0,0,0,8" />
                                     <ItemsControl ItemsSource="{Binding SelectedArtifact.Tags}" Margin="0,0,0,14">

@@ -141,6 +141,7 @@ Public Class RepairCandidate
                 _isSelected = value
                 OnPropertyChanged()
                 OnPropertyChanged(NameOf(SelectionState))
+                OnPropertyChanged(NameOf(ActionExplanation))
             End If
         End Set
     End Property
@@ -212,11 +213,11 @@ Public Class RepairCandidate
     Public ReadOnly Property SelectionState As String
         Get
             If Not CanRepairAutomatically Then
-                Return "Manual review required"
+                Return "Review-only; cannot apply automatically"
             End If
 
             If IsExpensiveAutomatic AndAlso Not IsSelected Then
-                Return "Expensive, not selected"
+                Return "Can apply; reads retained file"
             End If
 
             If IsSelected Then
@@ -224,6 +225,67 @@ Public Class RepairCandidate
             End If
 
             Return "Repairable, not selected"
+        End Get
+    End Property
+
+    Public ReadOnly Property RepairImpact As String
+        Get
+            Select Case If(ActionType, "").Trim().ToLowerInvariant()
+                Case "rebindpath"
+                    Return "Catalog only"
+                Case "regeneratethumbnail"
+                    Return "Generated asset + catalog"
+                Case "recomputehash"
+                    Return "Reads retained file + catalog"
+                Case "reextracttext"
+                    Return "Reads retained file + generated index"
+            End Select
+
+            If MutatesCatalog AndAlso TouchesRetainedFiles Then
+                Return "Catalog + retained file"
+            End If
+
+            If MutatesCatalog Then
+                Return "Catalog only"
+            End If
+
+            If TouchesRetainedFiles Then
+                Return "Retained file"
+            End If
+
+            Return "Read-only review"
+        End Get
+    End Property
+
+    Public ReadOnly Property ActionExplanation As String
+        Get
+            If Not CanRepairAutomatically Then
+                Return "Not selectable because this finding needs operator judgment. Filing Cabinet will show the issue but will not choose a destructive or interpretive fix."
+            End If
+
+            If IsExpensiveAutomatic AndAlso Not IsSelected Then
+                Return "Selectable, but left off by default because it may read retained file content or take longer than the fast health pass."
+            End If
+
+            If IsSelected Then
+                Return $"Will run {ActionType}; impact: {RepairImpact}."
+            End If
+
+            Return $"Selectable automatic repair; impact: {RepairImpact}."
+        End Get
+    End Property
+
+    Public ReadOnly Property SelectionHelp As String
+        Get
+            If Not CanRepairAutomatically Then
+                Return "Disabled: review-only finding"
+            End If
+
+            If IsExpensiveAutomatic Then
+                Return "Optional: may read retained files"
+            End If
+
+            Return "Automatic repair candidate"
         End Get
     End Property
 

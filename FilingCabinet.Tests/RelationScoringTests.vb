@@ -111,12 +111,12 @@ Namespace FilingCabinet.Tests
             candidate.SourceProvenance = "Built from FilingCabinet.vbproj"
 
             Dim keys = Global.FilingCabinet.MainViewModel.ManifestOriginKeys(selected)
-            Assert.IsTrue(keys.Contains("filecabinet", StringComparer.OrdinalIgnoreCase), "Should extract 'filecabinet' from .vbproj stem")
+            Assert.IsTrue(keys.Contains("filingcabinet", StringComparer.OrdinalIgnoreCase), "Should extract 'filingcabinet' from .vbproj stem")
 
             Dim relation = Global.FilingCabinet.MainViewModel.BuildArtifactRelation(selected, candidate)
             Assert.IsNotNull(relation)
-            Assert.IsTrue(relation.Reasons.Any(Function(r) r.Contains("shared project origin") AndAlso r.Contains("filecabinet")),
-                          "Relation should cite shared project origin: filecabinet")
+            Assert.IsTrue(relation.Reasons.Any(Function(r) r.Contains("shared project origin") AndAlso r.Contains("filingcabinet")),
+                          "Relation should cite shared project origin: filingcabinet")
         End Sub
 
         <TestMethod>

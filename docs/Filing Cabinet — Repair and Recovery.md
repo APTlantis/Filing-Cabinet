@@ -433,3 +433,129 @@ delete
 The goal of repair is not to make warnings disappear.
 
 The goal is to return the vault to a state that is understandable, verifiable, and trustworthy.
+
+## Repair UX Iteration Process
+
+Use this process when a repair or vault-health workflow is technically correct but not easy to understand in the desktop app.
+
+The goal is to improve operator confidence without changing the safety model.
+
+```text
+Observe the confusing moment
+  ↓
+Name the hidden state
+  ↓
+Expose the reason in the UI
+  ↓
+Pin the behavior with tests
+  ↓
+Verify before packaging
+```
+
+### 1. Capture the Confusing Moment
+
+Start from the operator question, not from the implementation.
+
+Examples:
+
+- Why is this button disabled?
+- Is the app currently doing work?
+- Why was this row selected automatically?
+- Why can this row not be selected?
+- Why did this option work last time but not now?
+- What will Apply actually change?
+
+Do not begin by adding new repair behavior. First identify which existing state is hidden from the operator.
+
+### 2. Separate Repair Semantics from Repair Explanation
+
+Keep these boundaries distinct:
+
+```text
+Repair semantics:
+what the app is allowed to do
+
+Repair explanation:
+what the app tells the operator about that decision
+```
+
+For example, review-only findings should remain review-only. The improvement is to say that their checkboxes are disabled because Filing Cabinet will not choose an interpretive or destructive fix automatically.
+
+### 3. Make Workflow Phase Visible
+
+Every vault-health surface should make the current phase obvious:
+
+- no analysis has run yet
+- analysis is running
+- repair application is running
+- findings are published
+- no findings exist
+- apply is unavailable because nothing automatic is selected
+
+When a command is disabled, pair the disabled state with a nearby explanation. Do not rely on the user discovering a tooltip.
+
+### 4. Make Row Selection Rules Visible
+
+Each repair candidate row should explain:
+
+- whether it is automatic or review-only
+- whether it is selected
+- why it was selected by default or left unselected
+- what kind of state it will touch
+- whether it may read retained file content
+
+Recommended impact labels:
+
+| Impact | Meaning |
+|---|---|
+| Catalog only | Updates catalog metadata without rewriting retained files |
+| Generated asset + catalog | Regenerates derived state such as thumbnails and updates the catalog |
+| Reads retained file + catalog | Reads retained content to compute or verify catalog metadata |
+| Reads retained file + generated index | Reads retained content to rebuild derived search text |
+| Read-only review | Reports a condition but does not apply an automatic fix |
+
+### 5. Keep Safe Defaults Boring
+
+Safe default selection should stay conservative:
+
+- select deterministic catalog/path repairs when the mapping is explicit
+- select regenerable derived assets when the retained source is present
+- leave expensive hash recomputation unselected unless explicitly requested
+- leave duplicate content, hash mismatch, outside-vault files, and incomplete provenance as review-only
+
+The UI may make these choices clearer, but it should not quietly broaden what gets applied.
+
+### 6. Test the Explanation Layer
+
+Add focused tests for the text or state that prevents confusion.
+
+Useful checks include:
+
+- review-only rows report that they cannot be applied automatically
+- expensive automatic rows explain that they may read retained files
+- safe catalog repairs report catalog-only impact
+- the Apply summary changes when nothing is selected versus when automatic repairs are selected
+
+These tests are not copywriting tests for every word. They are guardrails for the operator-facing contract.
+
+### 7. Verify the Whole Loop
+
+Before packaging or reinstalling, run:
+
+```powershell
+dotnet test .\FilingCabinet.Tests\FilingCabinet.Tests.vbproj
+```
+
+For UI-facing changes, also do a manual smoke pass after reinstall:
+
+1. Open the Vault Health dashboard.
+2. Confirm the dashboard says no analysis has run yet.
+3. Run Analyze Health.
+4. Confirm progress/status changes while work is running.
+5. Confirm Apply explains why it is disabled or what it will do.
+6. Inspect automatic, expensive automatic, and review-only rows.
+7. Select and clear visible repairs.
+8. Apply only a known safe candidate.
+9. Run Analyze Health again and confirm the resulting state is understandable.
+
+The pass is successful when the operator can tell what Filing Cabinet is doing, why an option is available or unavailable, and what kind of state a selected repair will affect.

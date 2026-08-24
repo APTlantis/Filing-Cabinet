@@ -20,6 +20,9 @@ Namespace FilingCabinet.Tests
             Assert.AreEqual("RecomputeHash", candidate.ActionType)
             Assert.IsTrue(candidate.CanRepairAutomatically)
             Assert.IsTrue(candidate.RequiresOperatorApproval)
+            Assert.AreEqual("Expensive automatic", candidate.RepairGroup)
+            Assert.AreEqual("Can apply; reads retained file", candidate.SelectionState)
+            StringAssert.Contains(candidate.ActionExplanation, "left off by default")
         End Sub
 
         <TestMethod>
@@ -49,6 +52,9 @@ Namespace FilingCabinet.Tests
             Assert.IsFalse(outsideVault.CanRepairAutomatically)
             Assert.AreEqual("ReviewOnly", incompleteMetadata.ActionType)
             Assert.IsFalse(incompleteMetadata.CanRepairAutomatically)
+            Assert.AreEqual("Review-only; cannot apply automatically", duplicate.SelectionState)
+            Assert.AreEqual("Disabled: review-only finding", duplicate.SelectionHelp)
+            StringAssert.Contains(duplicate.ActionExplanation, "Not selectable")
         End Sub
 
         <TestMethod>
@@ -58,6 +64,8 @@ Namespace FilingCabinet.Tests
             Assert.AreEqual("RebindPath", candidate.ActionType)
             Assert.IsTrue(candidate.CanRepairAutomatically)
             Assert.IsTrue(candidate.RequiresOperatorApproval)
+            Assert.AreEqual("Catalog only", candidate.RepairImpact)
+            StringAssert.Contains(candidate.ActionExplanation, "Will run RebindPath")
         End Sub
 
         Private Shared Function Finding(findingType As String) As Global.FilingCabinet.VaultHealthFinding

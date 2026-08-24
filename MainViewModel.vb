@@ -595,6 +595,7 @@ Public Class MainViewModel
                 _isVaultMaintenanceRunning = value
                 OnPropertyChanged()
                 RaiseMaintenanceCommandState()
+                RaiseVaultHealthGuidanceState()
             End If
         End Set
     End Property
@@ -1203,6 +1204,57 @@ Public Class MainViewModel
             Dim reviewOnly = selected.Count - repairable
             Dim expensive = selected.Where(Function(candidate) candidate.IsExpensiveAutomatic).Count()
             Return $"{repairable:N0} selected automatic repair(s), {expensive:N0} expensive hash repair(s); {reviewOnly:N0} review-only row(s) will be skipped"
+        End Get
+    End Property
+
+    Public ReadOnly Property VaultHealthWorkflowText As String
+        Get
+            If IsVaultMaintenanceRunning Then
+                Return "Work is running now. Buttons are disabled until the current pass finishes; progress and the current item are shown below."
+            End If
+
+            If Not _hasVaultHealthAnalysis Then
+                Return "Start with Analyze Health. It is a metadata-first pass: it checks catalog paths, generated assets, and hash coverage without changing retained files."
+            End If
+
+            If VaultHealthFindings.Count = 0 Then
+                Return "Health analysis is complete and no findings are currently published."
+            End If
+
+            Return "Automatic rows can be selected and applied. Review-only rows explain issues that need operator judgment; their checkboxes stay disabled by design."
+        End Get
+    End Property
+
+    Public ReadOnly Property RepairActionAvailabilityText As String
+        Get
+            If IsVaultMaintenanceRunning Then
+                Return "Apply is disabled while maintenance is running."
+            End If
+
+            If Not _hasVaultHealthAnalysis Then
+                Return "Apply is disabled until a health analysis publishes repair candidates."
+            End If
+
+            If RepairCandidates.Count = 0 Then
+                Return "Apply is disabled because there are no repair candidates."
+            End If
+
+            Dim selectedAutomatic = RepairCandidates.Where(Function(candidate) candidate.IsSelected AndAlso candidate.CanRepairAutomatically).Count()
+            If selectedAutomatic = 0 Then
+                Return "Apply is disabled until at least one automatic repair is selected."
+            End If
+
+            Dim selectedCandidates = RepairCandidates.Where(Function(candidate) candidate.IsSelected AndAlso candidate.CanRepairAutomatically).ToList()
+            Dim catalogOnly = selectedCandidates.Where(Function(candidate) String.Equals(candidate.RepairImpact, "Catalog only", StringComparison.OrdinalIgnoreCase)).Count()
+            Dim retainedOrGenerated = selectedCandidates.Count - catalogOnly
+            Return $"Apply will run {selectedAutomatic:N0} automatic repair(s): {catalogOnly:N0} catalog-only, {retainedOrGenerated:N0} reading retained files or regenerating derived assets."
+        End Get
+    End Property
+
+    Public ReadOnly Property CanApplySelectedRepairCandidates As Boolean
+        Get
+            Return Not IsVaultMaintenanceRunning AndAlso
+                RepairCandidates.Any(Function(candidate) candidate.IsSelected AndAlso candidate.CanRepairAutomatically)
         End Get
     End Property
 
@@ -3599,6 +3651,7 @@ Public Class MainViewModel
         OnPropertyChanged(NameOf(VaultHealthSummary))
         OnPropertyChanged(NameOf(VaultHealthBreakdown))
         OnPropertyChanged(NameOf(SelectedRepairSummary))
+        RaiseVaultHealthGuidanceState()
         OnPropertyChanged(NameOf(HealthFindingCountText))
         OnPropertyChanged(NameOf(HealthRepairableCountText))
         OnPropertyChanged(NameOf(HealthReviewOnlyCountText))
@@ -3619,6 +3672,7 @@ Public Class MainViewModel
 
             OnPropertyChanged(NameOf(VaultHealthSummary))
             OnPropertyChanged(NameOf(SelectedRepairSummary))
+            RaiseVaultHealthGuidanceState()
             OnPropertyChanged(NameOf(HealthSelectedCountText))
             RefreshRepairCandidateView()
             RaiseRepairCandidateCommandState()
@@ -3756,6 +3810,7 @@ Public Class MainViewModel
     Private Sub FinishBulkRepairSelection()
         OnPropertyChanged(NameOf(VaultHealthSummary))
         OnPropertyChanged(NameOf(SelectedRepairSummary))
+        RaiseVaultHealthGuidanceState()
         OnPropertyChanged(NameOf(HealthSelectedCountText))
         RefreshRepairCandidateView()
         RaiseRepairCandidateCommandState()
@@ -4087,6 +4142,12 @@ Public Class MainViewModel
         RaiseCommandState(SelectRepairActionCommand)
         RaiseCommandState(SelectAllAutomaticRepairCandidatesCommand)
         RaiseCommandState(ClearRepairSelectionCommand)
+    End Sub
+
+    Private Sub RaiseVaultHealthGuidanceState()
+        OnPropertyChanged(NameOf(VaultHealthWorkflowText))
+        OnPropertyChanged(NameOf(RepairActionAvailabilityText))
+        OnPropertyChanged(NameOf(CanApplySelectedRepairCandidates))
     End Sub
 
     Private Sub RaiseMaintenanceCommandState()
