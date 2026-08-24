@@ -85,6 +85,10 @@ Public Class CatalogService
             catalog.Vaults = New List(Of VaultModel)
         End If
 
+        If catalog.CaptureRecords Is Nothing Then
+            catalog.CaptureRecords = New List(Of CaptureRecordModel)
+        End If
+
         If catalog.Vaults.Count = 0 Then
             catalog.Vaults.Add(New VaultModel With {
                 .Id = catalog.CurrentVaultId,
@@ -168,6 +172,7 @@ Public Class CatalogService
             If loaded.Categories Is Nothing OrElse
                 loaded.Tags Is Nothing OrElse
                 loaded.Activities Is Nothing OrElse
+                loaded.CaptureRecords Is Nothing OrElse
                 loaded.Stats Is Nothing Then
                 result.Detail = "Backup JSON is missing one or more optional catalog collections."
                 Return result

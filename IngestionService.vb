@@ -28,6 +28,11 @@ Public Class IngestionService
         Dim itemsRoot = Path.Combine(vaultRootPath, "items")
         CatalogService.EnsureVaultFolders(vaultRootPath)
 
+        Dim capturedAt = DateTime.Now
+        Dim captureId = Guid.NewGuid().ToString("N")
+        Dim sourceRoot = CommonSourceRoot(files)
+        Dim captureName = BuildCaptureName(capturedAt, sourceRoot)
+        Dim siblingNames = files.Select(Function(file) file.Name).OrderBy(Function(name) name, StringComparer.OrdinalIgnoreCase).ToList()
         Dim totalBytes = files.Sum(Function(file) file.Length)
         Dim completedBytes As Long = 0
         Dim completedFiles = 0
@@ -42,7 +47,7 @@ Public Class IngestionService
 
                 Dim stored = New FileInfo(destination)
                 Report(progress, "Hashing", source.Name, "Hash", completedFiles, files.Count, completedBytes + stored.Length, totalBytes)
-                artifacts.Add(CreateArtifact(source, stored, vaultRootPath, HashRegistry.NormalizeActiveHashes(activeHashes)))
+                artifacts.Add(CreateArtifact(source, stored, vaultRootPath, HashRegistry.NormalizeActiveHashes(activeHashes), captureId, captureName, siblingNames))
 
                 If mode = IngestMode.Move Then
                     Try
@@ -84,7 +89,37 @@ Public Class IngestionService
             originalPath = stored.FullName
         End If
 
-        Return CreateArtifact(New FileInfo(originalPath), stored, vaultRootPath, HashRegistry.NormalizeActiveHashes(activeHashes))
+        Dim source = New FileInfo(originalPath)
+        Dim capturedAt = DateTime.Now
+        Dim sourceRoot = If(source.Exists AndAlso source.Directory IsNot Nothing, source.Directory.FullName, stored.DirectoryName)
+        Dim captureName = BuildCaptureName(capturedAt, sourceRoot)
+
+        Return CreateArtifact(source, stored, vaultRootPath, HashRegistry.NormalizeActiveHashes(activeHashes), Guid.NewGuid().ToString("N"), captureName, {stored.Name})
+    End Function
+
+    Public Shared Function CreateCaptureRecord(artifacts As IEnumerable(Of ArtifactModel), mode As IngestMode) As CaptureRecordModel
+        Dim artifactList = If(artifacts, Enumerable.Empty(Of ArtifactModel)()).Where(Function(artifact) artifact IsNot Nothing).ToList()
+        If artifactList.Count = 0 Then
+            Return Nothing
+        End If
+
+        Dim first = artifactList.First()
+        Dim sourceRoot = CommonSourceRoot(artifactList.Select(Function(artifact) New FileInfo(If(String.IsNullOrWhiteSpace(artifact.OriginalPath), artifact.Path, artifact.OriginalPath))))
+        Dim itemNames = artifactList.Select(Function(artifact) artifact.Name).Where(Function(name) Not String.IsNullOrWhiteSpace(name)).OrderBy(Function(name) name, StringComparer.OrdinalIgnoreCase).ToList()
+
+        Return New CaptureRecordModel With {
+            .Id = first.CaptureId,
+            .DisplayName = If(String.IsNullOrWhiteSpace(first.CaptureName), BuildCaptureName(DateTime.Now, sourceRoot), first.CaptureName),
+            .CapturedAt = first.IngestedAt,
+            .SourceRoot = sourceRoot,
+            .Method = mode.ToString(),
+            .ItemCount = artifactList.Count,
+            .TotalSizeBytes = artifactList.Sum(Function(artifact) artifact.SizeBytes),
+            .TotalSize = FormatSize(artifactList.Sum(Function(artifact) artifact.SizeBytes)),
+            .CommonParent = If(String.IsNullOrWhiteSpace(sourceRoot), "", Path.GetFileName(sourceRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))),
+            .AcquisitionChannel = MostCommonAcquisitionChannel(artifactList),
+            .ItemNames = itemNames
+        }
     End Function
 
     Public Function ExtractTextForArtifact(artifact As ArtifactModel, vaultRootPath As String) As (RelativePath As String, Status As String)
@@ -184,7 +219,7 @@ Public Class IngestionService
         })
     End Sub
 
-    Private Shared Function CreateArtifact(source As FileInfo, stored As FileInfo, vaultRootPath As String, activeHashes As String) As ArtifactModel
+    Private Shared Function CreateArtifact(source As FileInfo, stored As FileInfo, vaultRootPath As String, activeHashes As String, captureId As String, captureName As String, siblingNames As IEnumerable(Of String)) As ArtifactModel
         Dim category = InferCategory(source.Extension)
         Dim typeName = InferType(source.Extension)
         Dim typeFamily = InferTypeFamily(source.Extension)
@@ -192,6 +227,11 @@ Public Class IngestionService
         Dim nowText = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
         Dim computedHashes = HashServiceInstance.ComputeHashes(stored.FullName, activeHashes)
         Dim extraction = ExtractText(stored, vaultRootPath)
+        Dim allSiblingNames = If(siblingNames, Enumerable.Empty(Of String)()).ToList()
+        Dim siblings = allSiblingNames.
+            Where(Function(name) Not String.Equals(name, source.Name, StringComparison.OrdinalIgnoreCase)).
+            OrderBy(Function(name) name, StringComparer.OrdinalIgnoreCase).
+            ToList()
         Dim artifact = New ArtifactModel With {
             .Id = Guid.NewGuid().ToString("N"),
             .Name = stored.Name,
@@ -224,6 +264,14 @@ Public Class IngestionService
             .ArchiveStatus = "Active",
             .OriginalPath = source.FullName,
             .IngestedAt = nowText,
+            .CaptureId = captureId,
+            .CaptureName = captureName,
+            .SourceParentSnapshot = BuildSourceParentSnapshot(source.FullName),
+            .OriginalExtension = source.Extension.TrimStart("."c).ToLowerInvariant(),
+            .DetectedFamily = typeFamily,
+            .AcquisitionChannel = InferAcquisitionChannel(source.FullName),
+            .SiblingCount = siblings.Count,
+            .SiblingNames = siblings.Take(25).ToList(),
             .Tags = tags
         }
 
@@ -323,6 +371,156 @@ Public Class IngestionService
             Case Else
                 Return "File"
         End Select
+    End Function
+
+    Private Shared Function CommonSourceRoot(files As IEnumerable(Of FileInfo)) As String
+        Dim directories = If(files, Enumerable.Empty(Of FileInfo)()).
+            Select(Function(file)
+                       If file Is Nothing Then
+                           Return ""
+                       End If
+
+                       If file.Directory IsNot Nothing Then
+                           Return file.Directory.FullName
+                       End If
+
+                       Return ""
+                   End Function).
+            Where(Function(directory) Not String.IsNullOrWhiteSpace(directory)).
+            Distinct(StringComparer.OrdinalIgnoreCase).
+            ToList()
+
+        If directories.Count = 0 Then
+            Return ""
+        End If
+
+        If directories.Count = 1 Then
+            Return directories(0)
+        End If
+
+        Dim splitDirectories = directories.
+            Select(Function(directory) Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Split({Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries)).
+            ToList()
+
+        Dim sharedParts As New List(Of String)
+        Dim maxParts = splitDirectories.Min(Function(parts) parts.Length)
+
+        For index = 0 To maxParts - 1
+            Dim partIndex = index
+            Dim candidate = splitDirectories(0)(index)
+            If splitDirectories.All(Function(parts) String.Equals(parts(partIndex), candidate, StringComparison.OrdinalIgnoreCase)) Then
+                sharedParts.Add(candidate)
+            Else
+                Exit For
+            End If
+        Next
+
+        If sharedParts.Count = 0 Then
+            Return Path.GetPathRoot(directories(0))
+        End If
+
+        Dim root = Path.GetPathRoot(directories(0))
+        If String.IsNullOrWhiteSpace(root) Then
+            Return Path.Combine(sharedParts.ToArray())
+        End If
+
+        Dim rootName = root.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+        If sharedParts.Count > 0 AndAlso String.Equals(sharedParts(0), rootName, StringComparison.OrdinalIgnoreCase) Then
+            sharedParts.RemoveAt(0)
+        End If
+
+        Return Path.Combine({root}.Concat(sharedParts).ToArray())
+    End Function
+
+    Private Shared Function BuildCaptureName(capturedAt As DateTime, sourceRoot As String) As String
+        Dim sourceLabel = "file"
+
+        If Not String.IsNullOrWhiteSpace(sourceRoot) Then
+            sourceLabel = Path.GetFileName(sourceRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar))
+        End If
+
+        If String.IsNullOrWhiteSpace(sourceLabel) Then
+            sourceLabel = "root"
+        End If
+
+        Return $"{capturedAt:yyyy-MM-dd HH:mm} - {sourceLabel} intake"
+    End Function
+
+    Private Shared Function BuildSourceParentSnapshot(sourcePath As String) As List(Of String)
+        Dim names As New List(Of String)
+
+        Try
+            Dim directory = New DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(sourcePath)))
+
+            While directory IsNot Nothing AndAlso names.Count < 3
+                If Not String.IsNullOrWhiteSpace(directory.Name) Then
+                    names.Insert(0, directory.Name)
+                End If
+
+                directory = directory.Parent
+            End While
+        Catch
+            Return New List(Of String)
+        End Try
+
+        Return names
+    End Function
+
+    Private Shared Function InferAcquisitionChannel(sourcePath As String) As String
+        If String.IsNullOrWhiteSpace(sourcePath) Then
+            Return "Unknown"
+        End If
+
+        Try
+            Dim fullPath = Path.GetFullPath(sourcePath)
+            If fullPath.StartsWith("\\", StringComparison.OrdinalIgnoreCase) Then
+                Return "Network path"
+            End If
+
+            Dim downloads = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads")
+            Dim desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+
+            If IsUnderDirectory(fullPath, downloads) Then
+                Return "Downloads folder"
+            End If
+
+            If IsUnderDirectory(fullPath, desktop) Then
+                Return "Desktop"
+            End If
+
+            Dim root = Path.GetPathRoot(fullPath)
+            If Not String.IsNullOrWhiteSpace(root) Then
+                Dim drive = New DriveInfo(root)
+                If drive.DriveType = DriveType.Removable Then
+                    Return "Removable drive"
+                End If
+            End If
+        Catch
+            Return "Unknown"
+        End Try
+
+        Return "Local path"
+    End Function
+
+    Private Shared Function IsUnderDirectory(candidatePath As String, directory As String) As Boolean
+        If String.IsNullOrWhiteSpace(candidatePath) OrElse String.IsNullOrWhiteSpace(directory) Then
+            Return False
+        End If
+
+        Dim normalizedDirectory = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) & Path.DirectorySeparatorChar
+        Dim normalizedPath = Path.GetFullPath(candidatePath)
+        Return normalizedPath.StartsWith(normalizedDirectory, StringComparison.OrdinalIgnoreCase)
+    End Function
+
+    Private Shared Function MostCommonAcquisitionChannel(artifacts As IEnumerable(Of ArtifactModel)) As String
+        Return If(artifacts, Enumerable.Empty(Of ArtifactModel)()).
+            Select(Function(artifact) artifact.AcquisitionChannel).
+            Where(Function(channel) Not String.IsNullOrWhiteSpace(channel)).
+            GroupBy(Function(channel) channel, StringComparer.OrdinalIgnoreCase).
+            OrderByDescending(Function(group) group.Count()).
+            ThenBy(Function(group) group.Key).
+            Select(Function(group) group.Key).
+            FirstOrDefault()
     End Function
 
     Private Shared Function InferCategory(extension As String) As String

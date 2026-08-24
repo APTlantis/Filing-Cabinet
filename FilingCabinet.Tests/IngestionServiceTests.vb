@@ -23,6 +23,10 @@ Namespace FilingCabinet.Tests
                 Assert.IsTrue(File.Exists(artifacts(0).Path))
                 Assert.AreEqual(sourcePath, artifacts(0).OriginalPath)
                 Assert.AreEqual("Manifests / Config", artifacts(0).Category)
+                Assert.AreEqual("toml", artifacts(0).OriginalExtension)
+                Assert.AreEqual("Text", artifacts(0).DetectedFamily)
+                Assert.IsFalse(String.IsNullOrWhiteSpace(artifacts(0).CaptureId))
+                Assert.IsFalse(String.IsNullOrWhiteSpace(artifacts(0).CaptureName))
                 Assert.AreEqual("Verified", artifacts(0).HashStatus)
                 Assert.IsFalse(String.IsNullOrWhiteSpace(artifacts(0).Id))
                 Assert.IsFalse(String.IsNullOrWhiteSpace(artifacts(0).RelativePath))
@@ -30,6 +34,50 @@ Namespace FilingCabinet.Tests
                 Assert.IsFalse(String.IsNullOrWhiteSpace(artifacts(0).ExtractedTextRelativePath))
                 Assert.IsTrue(File.Exists(Path.Combine(vaultRoot, artifacts(0).ExtractedTextRelativePath)))
                 Assert.AreEqual(Global.FilingCabinet.ThumbnailService.FallbackCardStatus, artifacts(0).ThumbnailStatus)
+            Finally
+                If Directory.Exists(workspace) Then
+                    Directory.Delete(workspace, recursive:=True)
+                End If
+            End Try
+        End Sub
+
+        <TestMethod>
+        Sub IngestCapturesBatchContextAndSiblingFacts()
+            Dim workspace = Path.Combine(Path.GetTempPath(), "FilingCabinetTests", Guid.NewGuid().ToString("N"))
+            Dim sourceRoot = Path.Combine(workspace, "Downloads", "Intel-NIC")
+            Dim vaultRoot = Path.Combine(workspace, "vault")
+            Directory.CreateDirectory(sourceRoot)
+            Dim setupPath = Path.Combine(sourceRoot, "setup.exe")
+            Dim readmePath = Path.Combine(sourceRoot, "readme.txt")
+            Dim firmwarePath = Path.Combine(sourceRoot, "firmware.bin")
+            File.WriteAllBytes(setupPath, {1, 2, 3})
+            File.WriteAllText(readmePath, "driver notes")
+            File.WriteAllBytes(firmwarePath, {4, 5, 6})
+
+            Try
+                Dim service As New Global.FilingCabinet.IngestionService()
+                Dim artifacts = service.Ingest({sourceRoot}, vaultRoot, Nothing, Global.FilingCabinet.IngestMode.Copy)
+
+                Assert.AreEqual(3, artifacts.Count)
+                Assert.IsTrue(artifacts.All(Function(artifact) String.Equals(artifact.CaptureId, artifacts(0).CaptureId, StringComparison.OrdinalIgnoreCase)))
+                Assert.IsTrue(artifacts.All(Function(artifact) artifact.SiblingCount = 2))
+                Assert.IsTrue(artifacts.All(Function(artifact) artifact.SourceParentSnapshot.Contains("Intel-NIC")))
+                Assert.IsTrue(artifacts.All(Function(artifact) Not String.IsNullOrWhiteSpace(artifact.AcquisitionChannel)))
+
+                Dim setup = artifacts.Single(Function(artifact) artifact.OriginalPath = setupPath)
+                Assert.AreEqual("exe", setup.OriginalExtension)
+                Assert.AreEqual("Installer", setup.DetectedFamily)
+                CollectionAssert.Contains(setup.SiblingNames, "readme.txt")
+                CollectionAssert.Contains(setup.SiblingNames, "firmware.bin")
+
+                Dim capture = Global.FilingCabinet.IngestionService.CreateCaptureRecord(artifacts, Global.FilingCabinet.IngestMode.Copy)
+                Assert.IsNotNull(capture)
+                Assert.AreEqual(artifacts(0).CaptureId, capture.Id)
+                Assert.AreEqual("Copy", capture.Method)
+                Assert.AreEqual(3, capture.ItemCount)
+                Assert.AreEqual(sourceRoot, capture.SourceRoot)
+                Assert.AreEqual("Intel-NIC", capture.CommonParent)
+                CollectionAssert.Contains(capture.ItemNames, "setup.exe")
             Finally
                 If Directory.Exists(workspace) Then
                     Directory.Delete(workspace, recursive:=True)

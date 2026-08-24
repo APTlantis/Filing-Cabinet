@@ -108,6 +108,11 @@ Public Class VaultHeadlessService
         Dim ingested = _ingestionService.Ingest(requestedPaths, catalog.VaultRootPath, Nothing, mode, catalog.ActiveHashes)
 
         If ingested.Count > 0 Then
+            Dim captureRecord = IngestionService.CreateCaptureRecord(ingested, mode)
+            If captureRecord IsNot Nothing Then
+                catalog.CaptureRecords.Insert(0, captureRecord)
+            End If
+
             For Each artifact In ingested
                 catalog.Artifacts.Insert(0, artifact)
             Next

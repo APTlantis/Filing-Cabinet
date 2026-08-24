@@ -20,6 +20,22 @@ Namespace FilingCabinet.Tests
         End Sub
 
         <TestMethod>
+        Sub SharedCaptureRecordProducesExplicitRelationReason()
+            Dim selected = Artifact("driver.inf", "Manifests / Config", "Text", "hash-a", {})
+            selected.CaptureId = "capture-123"
+            selected.CaptureName = "2026-08-23 19:02 - Downloads intake"
+
+            Dim candidate = Artifact("setup.exe", "Software / Installers", "Installer", "hash-b", {})
+            candidate.CaptureId = "capture-123"
+            candidate.CaptureName = selected.CaptureName
+
+            Dim relation = Global.FilingCabinet.MainViewModel.BuildArtifactRelation(selected, candidate)
+
+            Assert.IsNotNull(relation)
+            CollectionAssert.Contains(relation.Reasons, "same capture record")
+        End Sub
+
+        <TestMethod>
         Sub SameOriginalFolderAndDateBatchProduceRelation()
             Dim root = Path.Combine(Path.GetTempPath(), "FilingCabinetTests", Guid.NewGuid().ToString("N"))
             Dim sourceRoot = Path.Combine(root, "source")

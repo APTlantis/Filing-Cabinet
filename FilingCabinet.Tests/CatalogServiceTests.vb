@@ -19,6 +19,7 @@ Namespace FilingCabinet.Tests
                 Assert.AreEqual(vaultRoot, catalog.VaultRootPath)
                 Assert.AreEqual("Move", catalog.DefaultIngestMode)
                 Assert.IsEmpty(catalog.Artifacts)
+                Assert.IsEmpty(catalog.CaptureRecords)
                 Assert.IsTrue(File.Exists(catalogPath))
                 Assert.IsTrue(Directory.Exists(Path.Combine(vaultRoot, "items")))
                 Assert.IsTrue(Directory.Exists(Path.Combine(vaultRoot, "quarantine")))
@@ -68,6 +69,12 @@ Namespace FilingCabinet.Tests
                     .Name = "sample.txt",
                     .RelativePath = Path.Combine("items", "sample.txt")
                 })
+                catalog.CaptureRecords.Add(New Global.FilingCabinet.CaptureRecordModel With {
+                    .Id = "capture-1",
+                    .DisplayName = "2026-08-23 19:02 - Downloads intake",
+                    .Method = "Copy",
+                    .ItemCount = 1
+                })
 
                 Dim backupPath = service.ExportSnapshot(catalog, Path.Combine(vaultRoot, "exports"))
                 Dim json = File.ReadAllText(backupPath)
@@ -78,6 +85,8 @@ Namespace FilingCabinet.Tests
                 Assert.IsNotNull(exported)
                 Assert.AreEqual(1, exported.Artifacts.Count)
                 Assert.AreEqual("artifact-1", exported.Artifacts(0).Id)
+                Assert.AreEqual(1, exported.CaptureRecords.Count)
+                Assert.AreEqual("capture-1", exported.CaptureRecords(0).Id)
             Finally
                 If Directory.Exists(workspace) Then
                     Directory.Delete(workspace, recursive:=True)
@@ -180,6 +189,7 @@ Namespace FilingCabinet.Tests
                 Assert.AreEqual("", catalog.TagSearchText)
                 Assert.AreEqual("", catalog.SelectedTag)
                 Assert.AreEqual("", catalog.SelectedCategory)
+                Assert.IsNotNull(catalog.CaptureRecords)
                 Assert.AreEqual(1, catalog.Artifacts.Count)
                 Assert.AreEqual("Unknown", catalog.Artifacts(0).TrustClassification)
                 Assert.AreEqual("Normal", catalog.Artifacts(0).RetentionPriority)

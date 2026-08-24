@@ -1493,6 +1493,11 @@ Public Class MainViewModel
     End Function
 
     Private Sub ApplyIngestedArtifacts(ingested As List(Of ArtifactModel), mode As IngestMode)
+        Dim captureRecord = IngestionService.CreateCaptureRecord(ingested, mode)
+        If captureRecord IsNot Nothing Then
+            _catalog.CaptureRecords.Insert(0, captureRecord)
+        End If
+
         For Each artifact In ingested
             Artifacts.Insert(0, artifact)
             _catalog.Artifacts.Insert(0, artifact)
@@ -2724,6 +2729,11 @@ Public Class MainViewModel
             reasons.Add("same ingest session")
         End If
 
+        If SameCaptureRecord(candidate, selected) Then
+            score += 5
+            reasons.Add("same capture record")
+        End If
+
         Dim sharedExtension = SharedExtensionFamily(selected, candidate)
         If Not String.IsNullOrWhiteSpace(sharedExtension) Then
             score += 2
@@ -2797,6 +2807,11 @@ Public Class MainViewModel
         End If
 
         Return candidateDate.Date = selectedDate.Date AndAlso Math.Abs((candidateDate - selectedDate).TotalHours) <= 4
+    End Function
+
+    Private Shared Function SameCaptureRecord(candidate As ArtifactModel, selected As ArtifactModel) As Boolean
+        Return Not String.IsNullOrWhiteSpace(candidate?.CaptureId) AndAlso
+            String.Equals(candidate.CaptureId, selected?.CaptureId, StringComparison.OrdinalIgnoreCase)
     End Function
 
     Private Shared Function SharedExtensionFamily(selected As ArtifactModel, candidate As ArtifactModel) As String

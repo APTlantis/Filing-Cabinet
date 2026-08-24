@@ -25,6 +25,7 @@ Public Class CatalogData
     Public Property Categories As New List(Of CategoryModel)
     Public Property Tags As New List(Of String)
     Public Property Activities As New List(Of ActivityEntryModel)
+    Public Property CaptureRecords As New List(Of CaptureRecordModel)
     Public Property Artifacts As New List(Of ArtifactModel)
 End Class
 
@@ -494,6 +495,20 @@ Public Class ActivityEntryModel
     Public Property IconBackground As String = BlueSlatePalette.TaxonomyDim
 End Class
 
+Public Class CaptureRecordModel
+    Public Property Id As String = ""
+    Public Property DisplayName As String = ""
+    Public Property CapturedAt As String = ""
+    Public Property SourceRoot As String = ""
+    Public Property Method As String = ""
+    Public Property ItemCount As Integer
+    Public Property TotalSizeBytes As Long
+    Public Property TotalSize As String = ""
+    Public Property CommonParent As String = ""
+    Public Property AcquisitionChannel As String = ""
+    Public Property ItemNames As New List(Of String)
+End Class
+
 Public Class HelpDocumentModel
     Public Property Title As String = ""
     Public Property RelativePath As String = ""
@@ -578,6 +593,14 @@ Public Class ArtifactModel
     Private _isStarred As Boolean
     Private _originalPath As String = ""
     Private _ingestedAt As String = ""
+    Private _captureId As String = ""
+    Private _captureName As String = ""
+    Private _sourceParentSnapshot As New List(Of String)
+    Private _originalExtension As String = ""
+    Private _detectedFamily As String = ""
+    Private _acquisitionChannel As String = ""
+    Private _siblingCount As Integer
+    Private _siblingNames As New List(Of String)
     Private _tags As New List(Of String)
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
@@ -928,6 +951,94 @@ Public Class ArtifactModel
         End Set
     End Property
 
+    Public Property CaptureId As String
+        Get
+            Return _captureId
+        End Get
+        Set(value As String)
+            If SetValue(_captureId, If(value, "")) Then
+                OnPropertyChanged(NameOf(CaptureSummary))
+            End If
+        End Set
+    End Property
+
+    Public Property CaptureName As String
+        Get
+            Return _captureName
+        End Get
+        Set(value As String)
+            If SetValue(_captureName, If(value, "")) Then
+                OnPropertyChanged(NameOf(CaptureSummary))
+            End If
+        End Set
+    End Property
+
+    Public Property SourceParentSnapshot As List(Of String)
+        Get
+            Return _sourceParentSnapshot
+        End Get
+        Set(value As List(Of String))
+            If value Is Nothing Then
+                value = New List(Of String)
+            End If
+
+            If SetValue(_sourceParentSnapshot, value) Then
+                OnPropertyChanged(NameOf(SourceParentSnapshotText))
+            End If
+        End Set
+    End Property
+
+    Public Property OriginalExtension As String
+        Get
+            Return _originalExtension
+        End Get
+        Set(value As String)
+            SetValue(_originalExtension, If(value, ""))
+        End Set
+    End Property
+
+    Public Property DetectedFamily As String
+        Get
+            Return _detectedFamily
+        End Get
+        Set(value As String)
+            SetValue(_detectedFamily, If(value, ""))
+        End Set
+    End Property
+
+    Public Property AcquisitionChannel As String
+        Get
+            Return _acquisitionChannel
+        End Get
+        Set(value As String)
+            SetValue(_acquisitionChannel, If(value, ""))
+        End Set
+    End Property
+
+    Public Property SiblingCount As Integer
+        Get
+            Return _siblingCount
+        End Get
+        Set(value As Integer)
+            If SetValue(_siblingCount, Math.Max(0, value)) Then
+                OnPropertyChanged(NameOf(CaptureSummary))
+            End If
+        End Set
+    End Property
+
+    Public Property SiblingNames As List(Of String)
+        Get
+            Return _siblingNames
+        End Get
+        Set(value As List(Of String))
+            If value Is Nothing Then
+                value = New List(Of String)
+            End If
+
+            SetValue(_siblingNames, value)
+        End Set
+    End Property
+
     Public Property Tags As List(Of String)
         Get
             Return _tags
@@ -947,6 +1058,28 @@ Public Class ArtifactModel
     Public ReadOnly Property TagsText As String
         Get
             Return String.Join(", ", Tags)
+        End Get
+    End Property
+
+    <JsonIgnore>
+    Public ReadOnly Property SourceParentSnapshotText As String
+        Get
+            Return String.Join(" / ", SourceParentSnapshot)
+        End Get
+    End Property
+
+    <JsonIgnore>
+    Public ReadOnly Property CaptureSummary As String
+        Get
+            If Not String.IsNullOrWhiteSpace(CaptureName) Then
+                Return If(SiblingCount > 0, $"{CaptureName}  •  {SiblingCount:N0} sibling(s)", CaptureName)
+            End If
+
+            If Not String.IsNullOrWhiteSpace(CaptureId) Then
+                Return If(SiblingCount > 0, $"{CaptureId}  •  {SiblingCount:N0} sibling(s)", CaptureId)
+            End If
+
+            Return If(SiblingCount > 0, $"{SiblingCount:N0} sibling(s)", "")
         End Get
     End Property
 
