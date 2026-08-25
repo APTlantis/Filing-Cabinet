@@ -1331,45 +1331,32 @@
                                     </Grid>
 
                                     <TextBlock Text="Operator Context" Foreground="{StaticResource Atl.Brush.Archive}" FontSize="11" Margin="0,0,0,8" />
-                                    <TextBlock Text="Retention reason" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
-                                    <TextBox Text="{Binding EditRetentionReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditorTextBox}" Margin="0,0,0,8" ToolTip="Retention reason" />
-                                    <TextBlock Text="Why this matters" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
-                                    <TextBox Text="{Binding EditWhyThisMatters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditorTextBox}" Margin="0,0,0,8" ToolTip="Why this matters" />
-                                    <TextBlock Text="Source provenance" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
-                                    <TextBox Text="{Binding EditSourceProvenance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditorTextBox}" Margin="0,0,0,8" ToolTip="Source or provenance" />
-                                    <TextBlock Text="Acquisition method" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
-                                    <TextBox Text="{Binding EditAcquisitionMethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditorTextBox}" Margin="0,0,0,8" ToolTip="Acquisition method" />
-                                    <Grid Margin="0,0,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="Trust" Style="{StaticResource SmallLabel}" />
-                                        <TextBlock Grid.Column="1" Text="Priority" Style="{StaticResource SmallLabel}" Margin="8,0,0,0" />
-                                    </Grid>
-                                    <Grid Margin="0,0,0,8">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <ComboBox SelectedItem="{Binding EditTrustClassification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                  ItemsSource="{Binding TrustClassificationOptions}"
-                                                  Style="{StaticResource EditorComboBox}"
-                                                  Margin="0,0,4,0"
-                                                  ToolTip="Trust classification" />
-                                        <ComboBox Grid.Column="1"
-                                                  SelectedItem="{Binding EditRetentionPriority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                  ItemsSource="{Binding RetentionPriorityOptions}"
-                                                  Style="{StaticResource EditorComboBox}"
-                                                  Margin="4,0,0,0"
-                                                  ToolTip="Retention priority" />
-                                    </Grid>
-                                    <TextBlock Text="Archive status" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
-                                    <ComboBox SelectedItem="{Binding EditArchiveStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                              ItemsSource="{Binding ArchiveStatusOptions}"
+                                    <TextBlock Text="Purpose" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
+                                    <ComboBox SelectedItem="{Binding EditPurpose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding PurposeOptions}"
                                               Style="{StaticResource EditorComboBox}"
-                                              Margin="0,0,0,18"
-                                              ToolTip="Archive status" />
+                                              Margin="0,0,0,8"
+                                              ToolTip="Why this artifact was preserved" />
+                                    <TextBlock Text="Provenance" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
+                                    <ComboBox SelectedItem="{Binding EditProvenance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding ProvenanceOptions}"
+                                              Style="{StaticResource EditorComboBox}"
+                                              Margin="0,0,0,8"
+                                              ToolTip="What kind of source this artifact came from" />
+                                    <TextBlock Text="Trust" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
+                                    <ComboBox SelectedItem="{Binding EditTrustClassification, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding TrustClassificationOptions}"
+                                              Style="{StaticResource EditorComboBox}"
+                                              Margin="0,0,0,8"
+                                              ToolTip="How the operator regards this artifact; separate from hash verification" />
+                                    <TextBlock Text="Notes" Style="{StaticResource SmallLabel}" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding EditNotes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource EditorTextBox}"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             MinHeight="72"
+                                             Margin="0,0,0,18"
+                                             ToolTip="Optional operator context that does not fit the structured fields" />
 
                                     <Grid Margin="0,0,0,10">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="62" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
@@ -1509,13 +1496,6 @@
                                         <TextBlock Grid.Column="1" Text="{Binding SelectedArtifact.RatingText}" Foreground="{StaticResource Atl.Brush.Attention}" FontSize="14" />
                                     </Grid>
 
-                                    <TextBlock Text="Notes" Style="{StaticResource SmallLabel}" Margin="0,0,0,8" />
-                                    <TextBox Text="{Binding EditNotes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             Style="{StaticResource EditorTextBox}"
-                                             AcceptsReturn="True"
-                                             TextWrapping="Wrap"
-                                             MinHeight="88"
-                                             Margin="0,0,0,12" />
                                     <Grid Margin="0,0,0,24">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />

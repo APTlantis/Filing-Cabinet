@@ -53,6 +53,8 @@ Public Class MainViewModel
     Private _editTagsText As String = ""
     Private _editRating As Integer
     Private _editNotes As String = ""
+    Private _editPurpose As String = "Not specified"
+    Private _editProvenance As String = "Unknown / legacy"
     Private _editRetentionReason As String = ""
     Private _editWhyThisMatters As String = ""
     Private _editSourceProvenance As String = ""
@@ -597,6 +599,24 @@ Public Class MainViewModel
                 RaiseMaintenanceCommandState()
                 RaiseVaultHealthGuidanceState()
             End If
+        End Set
+    End Property
+
+    Public Property EditPurpose As String
+        Get
+            Return _editPurpose
+        End Get
+        Set(value As String)
+            SetEditValue(_editPurpose, NormalizeChoice(value, PurposeOptions, "Not specified"), NameOf(EditPurpose))
+        End Set
+    End Property
+
+    Public Property EditProvenance As String
+        Get
+            Return _editProvenance
+        End Get
+        Set(value As String)
+            SetEditValue(_editProvenance, NormalizeChoice(value, ProvenanceOptions, "Unknown / legacy"), NameOf(EditProvenance))
         End Set
     End Property
 
@@ -1310,7 +1330,19 @@ Public Class MainViewModel
 
     Public ReadOnly Property TrustClassificationOptions As IEnumerable(Of String)
         Get
-            Return {"Unknown", "Trusted", "Unverified", "Questionable"}
+            Return {"Unknown", "Trusted", "Verify later", "Reference only", "Questionable"}
+        End Get
+    End Property
+
+    Public ReadOnly Property PurposeOptions As IEnumerable(Of String)
+        Get
+            Return {"Not specified", "Hard to replace", "Operational use", "Recovery", "Evidence / reference", "Historical / archive"}
+        End Get
+    End Property
+
+    Public ReadOnly Property ProvenanceOptions As IEnumerable(Of String)
+        Get
+            Return {"Unknown / legacy", "Official / vendor", "Project / build output", "Personal / local", "Third-party source"}
         End Get
     End Property
 
@@ -1600,6 +1632,8 @@ Public Class MainViewModel
             EditTagsText = ""
             EditRating = 0
             EditNotes = ""
+            EditPurpose = "Not specified"
+            EditProvenance = "Unknown / legacy"
             EditRetentionReason = ""
             EditWhyThisMatters = ""
             EditSourceProvenance = ""
@@ -1617,6 +1651,8 @@ Public Class MainViewModel
         EditTagsText = SelectedArtifact.TagsText
         EditRating = SelectedArtifact.Rating
         EditNotes = SelectedArtifact.Notes
+        EditPurpose = SelectedArtifact.Purpose
+        EditProvenance = SelectedArtifact.Provenance
         EditRetentionReason = SelectedArtifact.RetentionReason
         EditWhyThisMatters = SelectedArtifact.WhyThisMatters
         EditSourceProvenance = SelectedArtifact.SourceProvenance
@@ -1695,6 +1731,8 @@ Public Class MainViewModel
         SelectedArtifact.Tags = parsedTags
         SelectedArtifact.Rating = EditRating
         SelectedArtifact.Notes = If(EditNotes, "").Trim()
+        SelectedArtifact.Purpose = NormalizeChoice(EditPurpose, PurposeOptions, "Not specified")
+        SelectedArtifact.Provenance = NormalizeChoice(EditProvenance, ProvenanceOptions, "Unknown / legacy")
         SelectedArtifact.RetentionReason = If(EditRetentionReason, "").Trim()
         SelectedArtifact.WhyThisMatters = If(EditWhyThisMatters, "").Trim()
         SelectedArtifact.SourceProvenance = If(EditSourceProvenance, "").Trim()
@@ -3249,6 +3287,7 @@ Public Class MainViewModel
 
     Private Shared Function IsUnverifiedArtifact(artifact As ArtifactModel) As Boolean
         Return String.Equals(artifact.TrustClassification, "Unverified", StringComparison.OrdinalIgnoreCase) OrElse
+            String.Equals(artifact.TrustClassification, "Verify later", StringComparison.OrdinalIgnoreCase) OrElse
             String.Equals(artifact.TrustClassification, "Questionable", StringComparison.OrdinalIgnoreCase) OrElse
             Not String.Equals(artifact.HashStatus, "Verified", StringComparison.OrdinalIgnoreCase)
     End Function
@@ -3466,7 +3505,13 @@ Public Class MainViewModel
     End Sub
 
     Private Shared Sub NormalizeArtifactChoices(artifact As ArtifactModel)
-        artifact.TrustClassification = NormalizeChoice(artifact.TrustClassification, {"Unknown", "Trusted", "Unverified", "Questionable"}, "Unknown")
+        artifact.Purpose = NormalizeChoice(artifact.Purpose, {"Not specified", "Hard to replace", "Operational use", "Recovery", "Evidence / reference", "Historical / archive"}, "Not specified")
+        artifact.Provenance = NormalizeChoice(artifact.Provenance, {"Unknown / legacy", "Official / vendor", "Project / build output", "Personal / local", "Third-party source"}, "Unknown / legacy")
+        If String.Equals(artifact.TrustClassification, "Unverified", StringComparison.OrdinalIgnoreCase) Then
+            artifact.TrustClassification = "Verify later"
+        Else
+            artifact.TrustClassification = NormalizeChoice(artifact.TrustClassification, {"Unknown", "Trusted", "Verify later", "Reference only", "Questionable"}, "Unknown")
+        End If
         artifact.RetentionPriority = NormalizeChoice(artifact.RetentionPriority, {"Normal", "High", "Cold archive", "Review later"}, "Normal")
         artifact.ArchiveStatus = NormalizeChoice(artifact.ArchiveStatus, {"Active", "Archived", "Quarantined", "Needs review"}, "Active")
     End Sub

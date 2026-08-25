@@ -645,6 +645,8 @@ Public Class ArtifactModel
     Private _hashStatus As String = "Not checked"
     Private _rating As Integer
     Private _notes As String = ""
+    Private _purpose As String = "Not specified"
+    Private _provenance As String = "Unknown / legacy"
     Private _retentionReason As String = ""
     Private _whyThisMatters As String = ""
     Private _sourceProvenance As String = ""
@@ -1010,6 +1012,24 @@ Public Class ArtifactModel
         End Get
         Set(value As String)
             SetValue(_ingestedAt, If(value, ""))
+        End Set
+    End Property
+
+    Public Property Purpose As String
+        Get
+            Return _purpose
+        End Get
+        Set(value As String)
+            SetValue(_purpose, If(value, "Not specified"))
+        End Set
+    End Property
+
+    Public Property Provenance As String
+        Get
+            Return _provenance
+        End Get
+        Set(value As String)
+            SetValue(_provenance, If(value, "Unknown / legacy"))
         End Set
     End Property
 
