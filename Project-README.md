@@ -15,9 +15,9 @@ Filing Cabinet is the governed project for Filing Cabinet, a local-first Windows
 
 ## Current state
 
-Version `0.1.2` is the active Store MSIX candidate line. The prior v1.x installer train is retained as pre-standard historical evidence and no longer acts as current release authority.
+Version `0.1.2` is the active Microsoft Store release line, with package manifest version `0.1.2.1`. The prior v1.x installer train is retained as pre-standard historical evidence and no longer acts as current release authority.
 
-The forward public Windows release path is MSIX submitted through the Microsoft Store, where the Store signs the public package. The first Store product identity is reserved as **Filing Cabinet**:
+The public Windows release path is MSIX through the Microsoft Store, where the Store signs the public package. Filing Cabinet is available in the Store under the following product identity:
 
 - Package identity name: `Aptlantis.FilingCabinet`
 - Publisher: `CN=81D6747D-F84F-4EFF-ACAA-9635D91ACCD0`
@@ -25,9 +25,9 @@ The forward public Windows release path is MSIX submitted through the Microsoft 
 - Package family name: `Aptlantis.FilingCabinet_jfrcsngvdwx7g`
 - Store ID: `9N29X9KR70R3`
 
-Aptlantis.FilingCabinet_0.1.2.0_x64.msix has been accepted by Partner Center package validation as version `0.1.2.0`, X64, Windows.Desktop min version `10.0.18362.0`, language `en-us`, with capabilities `runFullTrust` and `Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe`, reported size `9.4 MB`. This is Store package acceptance evidence; public release records still need any remaining certification/publication steps and verification of the Microsoft-signed distributed Store package.
+The supplied Store listing capture confirms the public availability of Filing Cabinet. The retained `Aptlantis.FilingCabinet_0.1.2.0_x64.msix` package was accepted by Partner Center package validation as version `0.1.2.0`, X64, Windows.Desktop min version `10.0.18362.0`, language `en-us`, with capabilities `runFullTrust` and `Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe`, reported size `9.4 MB`. That retained package evidence is historical; the active manifest declares package version `0.1.2.1`.
 
-Current Store candidate evidence:
+Historical Store-package evidence:
 
 - MSIX package: `trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
 - ARHS hash manifest: `trust/FileCabinet-0.1.2.0.hashmanifest.toml`
@@ -38,7 +38,7 @@ The detached PGP and SLH-DSA files sign the hash manifest for preservation/prove
 
 The v0.1.0 local release was verified on 2026-08-04 with source build, 104 passing tests, WiX MSI packaging, SHA-256 hashing, unsigned Authenticode status, and launch verification from the published executable. The MSI lifecycle was later verified on 2026-08-17 with quiet install, shell integration checks, installed CLI version, installed WPF launch, installed documentation payload, and quiet uninstall cleanup. That MSI record remains historical/local direct-distribution evidence.
 
-The project is licensed under the MIT License. The current Store MSIX candidate has a dedicated hash manifest at `trust/FileCabinet-0.1.2.0.hashmanifest.toml`. The historical MSI artifact remains `artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi` with hash manifest `artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml`; no v0.1.2 MSI artifact is recorded.
+The project is licensed under the MIT License. The historical 0.1.2.0 Store MSIX candidate has a dedicated hash manifest at `trust/FileCabinet-0.1.2.0.hashmanifest.toml`. The historical MSI artifact remains `artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi` with hash manifest `artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml`; no v0.1.2 MSI artifact is recorded.
 
 Governance and product-facing records use **Filing Cabinet**. Compact `FilingCabinet` identifiers remain where Windows, .NET, package identity, executable naming, artifact filenames, or repository slugs should not contain spaces.
 
@@ -54,7 +54,7 @@ Governance and product-facing records use **Filing Cabinet**. Compact `FilingCab
 
 ## Verification entry points
 
-Follow `README.md`, the Store-aligned `Package.appxmanifest`, and the DRS MSIX workflow. A public release verification pass must cover source build, tests, MSIX/MSIXUPLOAD creation, Store identity alignment, Partner Center package acceptance, certification status, Store signing authority, ARHS hash evidence for the final accepted package, installation or launch verification, data-safety notes, license inclusion, and documentation/manifests aligned to the resulting artifact.
+Follow `README.md`, the Store-aligned `Package.appxmanifest`, and the DRS MSIX workflow. Future public release verification must cover source build, tests, MSIX/MSIXUPLOAD creation, Store identity alignment, Store submission status, Store signing authority, ARHS hash evidence for the submitted package, installation or launch verification, data-safety notes, license inclusion, and documentation/manifests aligned to the resulting artifact.
 
 
 

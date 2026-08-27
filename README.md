@@ -8,9 +8,11 @@ Good candidates include installers, disk images, manifests, configuration files,
 
 ## Current Release
 
-Current version: **Filing Cabinet v0.1.2**.
+Current version: **Filing Cabinet v0.1.2**. The current package manifest version is `0.1.2.1`.
 
-The v0.1.2 Store MSIX candidate keeps the stable vault workflow from `0.1.1` and brings the active Windows package evidence into current DRS alignment. It publishes the MIT License, records Release Hasher manifests, and establishes the Windows MSIX -> Microsoft Store path as the forward public distribution route. The active Windows package version is `0.1.2.0`.
+Filing Cabinet is available through the Microsoft Store. The v0.1.2 line keeps the stable vault workflow from `0.1.1`, publishes the MIT License, records Release Hasher manifests, and uses the Windows MSIX -> Microsoft Store path for public distribution.
+
+![Filing Cabinet in the Microsoft Store](docs/assets/filing-cabinet-microsoft-store-listing.png)
 
 Current Windows package evidence:
 
@@ -18,24 +20,25 @@ Current Windows package evidence:
 - Store identity: `Aptlantis.FilingCabinet`
 - Store publisher: `CN=81D6747D-F84F-4EFF-ACAA-9635D91ACCD0`
 - Store ID: `9N29X9KR70R3`
-- Store-accepted MSIX candidate: `trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
-- Package version and architecture: `0.1.2.0`, X64
+- Current package manifest version: `0.1.2.1`, X64
+- Historical Store-accepted MSIX evidence: `trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
 - Device family: Windows.Desktop, min version `10.0.18362.0`
 - Language: `en-us`
 - Capabilities: `runFullTrust`, `Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe`
 - Store-reported file size: `9.4 MB`
 - ARHS hash manifest: `trust/FileCabinet-0.1.2.0.hashmanifest.toml`
 - Detached manifest signatures: `trust/FileCabinet-0.1.2.0.hashmanifest.toml.asc` and `trust/FileCabinet-0.1.2.0.hashmanifest.toml.sphincs`
-- Public Windows signing authority: Microsoft Store signs the distributed package after certification/publication
+- Public Windows distribution: Microsoft Store listing
+- Public Windows signing authority: Microsoft Store signs the distributed package
 - Historical/local MSI evidence: `artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi`
 
-`Package.appxmanifest` follows the accepted Store identity/display pattern, and `Aptlantis.FilingCabinet_0.1.2.0_x64.msix` has been accepted by Partner Center package validation. The detached PGP and SLH-DSA files sign the ARHS hash manifest for preservation/provenance evidence; they do not replace Microsoft Store signing for the public MSIX distribution.
+`Package.appxmanifest` follows the Store identity/display pattern, and the supplied listing capture shows Filing Cabinet available in Microsoft Store. `Aptlantis.FilingCabinet_0.1.2.0_x64.msix` and its signed hash manifest remain historical package-acceptance and preservation evidence. The detached PGP and SLH-DSA files sign the ARHS hash manifest; they do not replace Microsoft Store signing for public MSIX distribution.
 
 This release keeps the mature vault workflow: Vault Health has its own workspace, default analysis is metadata-first, large-file hash reads stay explicit, and bulk repair selection remains available for large repair lists. Current builds also combine Preview and Relations in the right panel, group hash settings by purpose, and start new catalogs with SHA-256 only unless the operator opts into additional hashes.
 
 Release notes:
 
-- `docs/Filing Cabinet v0.1.2 - Store MSIX Candidate.md`
+- `docs/Filing Cabinet v0.1.2 - Store MSIX Candidate.md` (historical candidate evidence)
 - `docs/Filing Cabinet - Release Checklist.md`
 - `docs/Filing Cabinet - Installer Hash Manifest.md`
 
@@ -301,7 +304,7 @@ Filing Cabinet's preservation model is documented in:
 
 ### Release Notes
 
-- [v0.1.2 - Store MSIX Candidate](docs/Filing Cabinet%20v0.1.2%20-%20Store%20MSIX%20Candidate.md)
+- [v0.1.2 - Historical Store MSIX Candidate](docs/Filing Cabinet%20v0.1.2%20-%20Store%20MSIX%20Candidate.md)
 - [Release Checklist](docs/Filing Cabinet%20-%20Release%20Checklist.md)
 
 ## Design Boundaries

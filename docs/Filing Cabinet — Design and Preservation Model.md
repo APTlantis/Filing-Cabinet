@@ -33,9 +33,9 @@ That work may include:
 - choosing copy or move intake
 - reviewing the generated category
 - adding tags
-- recording a retention reason
-- recording provenance or acquisition method
-- marking trust or retention state
+- choosing a concise preservation purpose
+- recording source provenance
+- marking operator trust separately from cryptographic verification
 - writing notes while the surrounding context is still fresh
 
 This is more work than dropping a file into a normal folder and walking away.
@@ -52,17 +52,15 @@ The vault does not require perfect metadata to be useful. Even a lightly reviewe
 
 The richer the record, however, the stronger the future payoff.
 
-Useful fields include:
+The compact operator-context fields are:
 
-- retention reason
-- why this matters
-- source provenance
-- acquisition method
-- trust classification
-- retention priority
-- archive status
-- operator notes
-- tags and custom metadata
+- purpose: why it was worth preserving
+- provenance: what kind of source it came from
+- trust: how the operator regards it, separate from whether its bytes verify
+- optional notes for details that do not fit those choices
+- tags and custom metadata for deeper organization
+
+Priority and archive status remain catalog lifecycle properties rather than part of the operator-context pass.
 
 The goal is not to turn artifact intake into form-filling. Starter values, inferred categories, bulk tools, intake profiles, saved views, review queues, and repair suggestions should reduce friction while preserving operator judgment.
 
@@ -83,7 +81,7 @@ The operator may know details the system cannot infer reliably:
 
 Filing Cabinet should therefore make it easy to add meaningful context through:
 
-- notes
+- purpose, provenance, trust, and notes
 - tags
 - categories
 - custom metadata

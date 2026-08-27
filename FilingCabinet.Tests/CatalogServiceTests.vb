@@ -192,6 +192,8 @@ Namespace FilingCabinet.Tests
                 Assert.IsNotNull(catalog.CaptureRecords)
                 Assert.AreEqual(1, catalog.Artifacts.Count)
                 Assert.AreEqual("Unknown", catalog.Artifacts(0).TrustClassification)
+                Assert.AreEqual("Not specified", catalog.Artifacts(0).Purpose)
+                Assert.AreEqual("Unknown / legacy", catalog.Artifacts(0).Provenance)
                 Assert.AreEqual("Normal", catalog.Artifacts(0).RetentionPriority)
                 Assert.AreEqual("Active", catalog.Artifacts(0).ArchiveStatus)
 
@@ -199,6 +201,8 @@ Namespace FilingCabinet.Tests
                 catalog.Artifacts(0).WhyThisMatters = "Documents restore context"
                 catalog.Artifacts(0).SourceProvenance = "Aptlantis release share"
                 catalog.Artifacts(0).AcquisitionMethod = "Manual import"
+                catalog.Artifacts(0).Purpose = "Recovery"
+                catalog.Artifacts(0).Provenance = "Official / vendor"
                 catalog.Artifacts(0).TrustClassification = "Trusted"
                 catalog.Artifacts(0).RetentionPriority = "High"
                 catalog.Artifacts(0).ArchiveStatus = "Archived"
@@ -209,6 +213,8 @@ Namespace FilingCabinet.Tests
                 Assert.AreEqual("Documents restore context", reloaded.Artifacts(0).WhyThisMatters)
                 Assert.AreEqual("Aptlantis release share", reloaded.Artifacts(0).SourceProvenance)
                 Assert.AreEqual("Manual import", reloaded.Artifacts(0).AcquisitionMethod)
+                Assert.AreEqual("Recovery", reloaded.Artifacts(0).Purpose)
+                Assert.AreEqual("Official / vendor", reloaded.Artifacts(0).Provenance)
                 Assert.AreEqual("Trusted", reloaded.Artifacts(0).TrustClassification)
                 Assert.AreEqual("High", reloaded.Artifacts(0).RetentionPriority)
                 Assert.AreEqual("Archived", reloaded.Artifacts(0).ArchiveStatus)

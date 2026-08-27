@@ -3,6 +3,23 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Project-specific generated packages, signing material, and local test state
+*.msix
+*.msixbundle
+*.msixupload
+*.appxupload
+*.pfx
+*.pvk
+*.pem
+*.key
+.verify-build/
+.qa/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+.DS_Store
+
 # User-specific files
 *.rsuser
 *.suo

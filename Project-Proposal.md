@@ -41,7 +41,7 @@ Out of scope:
 
 - Cloud vault storage as a normal requirement.
 - Automatic destructive repair without operator review.
-- Public Windows release claims before Store certification/publication and Microsoft-signed package verification.
+- Public Windows release claims before Microsoft Store availability is established.
 - Treating detached PGP or SLH-DSA signatures as a substitute for platform package signing.
 
 ## Success Criteria
@@ -49,7 +49,7 @@ Out of scope:
 - [ ] Users can retain, find, preview, verify, repair, and export local technical artifacts.
 - [ ] Vault data remains local-first and recoverable.
 - [ ] Release manifests, source release notes, packaged docs, checklist, installer/MSIX hashes, and signing/provenance records agree.
-- [ ] Microsoft Store MSIX workflow is verified for the public Windows GUI release path.
+- [x] Microsoft Store MSIX workflow is established for the public Windows GUI release path.
 - [ ] Historical MSI evidence remains clearly separated from the current public distribution authority.
 
 ## Failure Criteria
@@ -71,15 +71,15 @@ Out of scope:
 - Risk: Release evidence across manifests, README, docs, hashes, and Store records can drift.
 - Mitigation: Treat version and release-record synchronization as a release gate.
 
-- Risk: Store package acceptance can be mistaken for public release completion.
-- Mitigation: Preserve the distinction between accepted package candidate, certification/publication, Microsoft Store signing, install/launch verification, and final release claim.
+- Risk: Historical package acceptance can be mistaken for evidence about a later Store package.
+- Mitigation: Preserve the distinction between historical candidate packages, current Store availability, Microsoft Store signing, install/launch verification, and package-specific final release records.
 
 ## Roadmap
 
 1. Keep the active Store MSIX line aligned with product identity Filing Cabinet / Aptlantis.FilingCabinet.
-2. Reconcile manifest and Project-README drift around the current Store candidate package version `0.1.2.0` before the next release claim.
+2. Keep manifest and Project-README package version records aligned before the next Store update.
 3. Rebuild, rehash, and resubmit package candidates whenever packaged shell integration or release payload changes.
-4. Verify Microsoft-signed distributed Store package, launch, data safety, docs, and recovery behavior before public release claims.
+4. Verify the next distributed Store package, launch, data safety, docs, and recovery behavior before its public update claim.
 
 ## Version Milestone Sketch
 

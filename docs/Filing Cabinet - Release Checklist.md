@@ -1,6 +1,6 @@
 # Filing Cabinet Release Checklist
 
-## v0.1.2 Store MSIX Candidate
+## v0.1.2 Store MSIX Release Record
 
 - [x] Package identity uses `Aptlantis.FilingCabinet`.
 - [x] `Package.appxmanifest` version is `0.1.2.0`.
@@ -9,7 +9,7 @@
 - [x] Detached PGP signature exists for the ARHS hash manifest.
 - [x] Detached SLH-DSA signature exists for the ARHS hash manifest.
 - [x] Source records distinguish Store package acceptance from certification, publication, and Microsoft-signed distribution verification.
-- [ ] Certification/publication status recorded after Partner Center completes the public release workflow.
+- [x] Microsoft Store listing captured as public-availability evidence on 2026-08-26.
 - [ ] Microsoft-signed Store-distributed package verified.
 - [ ] Install or launch behavior verified from the final distributed package.
 - [ ] Data-safety and recovery notes verified against the final distributed package.
@@ -23,4 +23,4 @@
 
 ## Notes
 
-Passing package validation is not the same as public release completion. Keep Store acceptance, certification/publication, Microsoft Store signing, and local install/launch verification separate in all release records.
+The historical package-validation record is not a substitute for a distributed-package inspection. Keep Store availability, Microsoft Store signing, local install/launch verification, and package-specific provenance records separate for future releases.
