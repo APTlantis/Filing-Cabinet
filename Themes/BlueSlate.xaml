@@ -25,7 +25,8 @@
     <Color x:Key="Atl.Color.Indigo">#6A5BFF</Color>
     <Color x:Key="Atl.Color.Success">#30D58C</Color>
     <Color x:Key="Atl.Color.Verified">#6FE3A4</Color>
-    <Color x:Key="Atl.Color.Danger">#FF5C77</Color>
+    <Color x:Key="Atl.Color.Pink">#ED72B6</Color>
+    <Color x:Key="Atl.Color.Danger">#FF5C74</Color>
     <Color x:Key="Atl.Color.DangerDim">#3B1720</Color>
     <Color x:Key="Atl.Color.Build">#FF884D</Color>
     <Color x:Key="Atl.Color.BuildDim">#3A2712</Color>
@@ -63,6 +64,30 @@
     <SolidColorBrush x:Key="Atl.Brush.DangerDim" Color="{StaticResource Atl.Color.DangerDim}" />
     <SolidColorBrush x:Key="Atl.Brush.Build" Color="{StaticResource Atl.Color.Build}" />
     <SolidColorBrush x:Key="Atl.Brush.BuildDim" Color="{StaticResource Atl.Color.BuildDim}" />
+
+    <!-- Blue Slate 0.3.0 semantic roles. Existing aliases above remain for compatibility. -->
+    <SolidColorBrush x:Key="Atl.Brush.Canvas" Color="{StaticResource Atl.Color.Abyss}" />
+    <SolidColorBrush x:Key="Atl.Brush.CanvasRecessed" Color="{StaticResource Atl.Color.DeepNavy}" />
+    <SolidColorBrush x:Key="Atl.Brush.Overlay" Color="{StaticResource Atl.Color.DeepNavy}" />
+    <SolidColorBrush x:Key="Atl.Brush.Popover" Color="{StaticResource Atl.Color.DeepNavy}" />
+    <SolidColorBrush x:Key="Atl.Brush.Input" Color="{StaticResource Atl.Color.PanelDim}" />
+    <SolidColorBrush x:Key="Atl.Brush.Table" Color="{StaticResource Atl.Color.DeepNavy}" />
+    <SolidColorBrush x:Key="Atl.Brush.Disabled" Color="{StaticResource Atl.Color.PanelDim}" />
+    <SolidColorBrush x:Key="Atl.Brush.ContentPrimary" Color="{StaticResource Atl.Color.OffWhite}" />
+    <SolidColorBrush x:Key="Atl.Brush.ContentSecondary" Color="{StaticResource Atl.Color.SeaFoam}" />
+    <SolidColorBrush x:Key="Atl.Brush.ContentTertiary" Color="{StaticResource Atl.Color.PaleMist}" />
+    <SolidColorBrush x:Key="Atl.Brush.ContentDisabled" Color="{StaticResource Atl.Color.CoolGrey}" />
+    <SolidColorBrush x:Key="Atl.Brush.CodeAccent" Color="{StaticResource Atl.Color.Pink}" />
+    <SolidColorBrush x:Key="Atl.Brush.BorderStrong" Color="{StaticResource Atl.Color.CoolGrey}" />
+    <SolidColorBrush x:Key="Atl.Brush.IntentPrimary" Color="{StaticResource Atl.Color.ElectricCyan}" />
+    <SolidColorBrush x:Key="Atl.Brush.IntentSecondary" Color="{StaticResource Atl.Color.MistBlue}" />
+    <SolidColorBrush x:Key="Atl.Brush.IntentInfo" Color="{StaticResource Atl.Color.Violet}" />
+    <SolidColorBrush x:Key="Atl.Brush.ValidationValid" Color="{StaticResource Atl.Color.Verified}" />
+    <SolidColorBrush x:Key="Atl.Brush.ValidationInvalid" Color="{StaticResource Atl.Color.Danger}" />
+    <SolidColorBrush x:Key="Atl.Brush.ValidationInvalidSurface" Color="{StaticResource Atl.Color.DangerDim}" />
+    <CornerRadius x:Key="Atl.Radius.Small">4</CornerRadius>
+    <CornerRadius x:Key="Atl.Radius.Default">6</CornerRadius>
+    <CornerRadius x:Key="Atl.Radius.Large">10</CornerRadius>
 
     <DrawingBrush x:Key="Atl.Brush.GridBackground"
                   TileMode="Tile"
@@ -108,7 +133,7 @@
         <GradientStop Color="{StaticResource Atl.Color.SteelBlue}" Offset="1" />
     </LinearGradientBrush>
 
-    <DropShadowEffect x:Key="Atl.Effect.FocusGlow" Color="{StaticResource Atl.Color.ArcticCyan}" BlurRadius="14" ShadowDepth="0" Opacity="0.22" />
+    <DropShadowEffect x:Key="Atl.Effect.FocusGlow" Color="{StaticResource Atl.Color.ArcticCyan}" BlurRadius="16" ShadowDepth="0" Opacity="0.3" />
     <DropShadowEffect x:Key="Atl.Effect.SuccessGlow" Color="{StaticResource Atl.Color.Verified}" BlurRadius="14" ShadowDepth="0" Opacity="0.18" />
     <DropShadowEffect x:Key="Atl.Effect.WarningGlow" Color="{StaticResource Atl.Color.Brass}" BlurRadius="12" ShadowDepth="0" Opacity="0.18" />
     <DropShadowEffect x:Key="Atl.Effect.DangerGlow" Color="{StaticResource Atl.Color.Danger}" BlurRadius="16" ShadowDepth="0" Opacity="0.2" />
@@ -124,6 +149,23 @@
         <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="10,5" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource Atl.Brush.PanelRaised}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.IntentPrimary}" />
+                <Setter Property="Foreground" Value="{StaticResource Atl.Brush.ContentPrimary}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Focus}" />
+                <Setter Property="Effect" Value="{StaticResource Atl.Effect.FocusGlow}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource Atl.Brush.Disabled}" />
+                <Setter Property="Foreground" Value="{StaticResource Atl.Brush.ContentDisabled}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.BorderSoft}" />
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="TextBox">
@@ -133,6 +175,20 @@
         <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Border}" />
         <Setter Property="CaretBrush" Value="{StaticResource Atl.Brush.Focus}" />
         <Setter Property="SelectionBrush" Value="{StaticResource Atl.Brush.ActionSoft}" />
+        <Style.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Focus}" />
+                <Setter Property="Effect" Value="{StaticResource Atl.Effect.FocusGlow}" />
+            </Trigger>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.ValidationInvalid}" />
+                <Setter Property="Background" Value="{StaticResource Atl.Brush.ValidationInvalidSurface}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource Atl.Brush.ContentDisabled}" />
+                <Setter Property="Background" Value="{StaticResource Atl.Brush.Disabled}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="ComboBox">
@@ -140,6 +196,19 @@
         <Setter Property="Foreground" Value="{StaticResource Atl.Brush.Text}" />
         <Setter Property="Background" Value="{StaticResource Atl.Brush.PanelDim}" />
         <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Border}" />
+        <Style.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Focus}" />
+                <Setter Property="Effect" Value="{StaticResource Atl.Effect.FocusGlow}" />
+            </Trigger>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.ValidationInvalid}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource Atl.Brush.ContentDisabled}" />
+                <Setter Property="Background" Value="{StaticResource Atl.Brush.Disabled}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="CheckBox">
@@ -236,6 +305,9 @@
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{StaticResource Atl.Brush.PanelBlue}" />
                 <Setter Property="Foreground" Value="{StaticResource Atl.Brush.Text}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource Atl.Brush.Focus}" />
             </Trigger>
         </Style.Triggers>
     </Style>
