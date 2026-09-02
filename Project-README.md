@@ -10,7 +10,7 @@ Filing Cabinet is the governed project for Filing Cabinet, a local-first Windows
 - [Project proposal](Project-Proposal.md)
 - [AGENTS.md](AGENTS.md)
 - [User and operator README](README.md)
-- [Desktop Application Release Standard](D:/.library/aptlantis_core/DRS/README.md)
+- [Desktop Application Release Standard](D:/.city_hall/DRS/README.md)
 - [Windows GUI MSIX And Microsoft Store Workflow](../Windows-GUI-MSIX-Store-Workflow.md)
 
 ## Current state

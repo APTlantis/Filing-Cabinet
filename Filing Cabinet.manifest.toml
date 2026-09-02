@@ -39,9 +39,9 @@ tags = [
 
 [governance]
 primary_standard = "DRS"
-primary_standard_path = "D:\\.library\\aptlantis_core\\DRS\\README.md"
+primary_standard_path = "D:\\.city_hall\\DRS\\README.md"
 additional_standards = ["WGS", "PPS", "AAMHS", "ARHS"]
-additional_standard_paths = ["D:\\.library\\aptlantis_core\\WGS\\README.md", "D:\\.library\\aptlantis_core\\PPS\\README.md", "D:\\.library\\aptlantis_core\\AAMHS\\README.md", "D:\\.library\\aptlantis_core\\ARHS\\README.md"]
+additional_standard_paths = ["D:\\.city_hall\\WGS\\README.md", "D:\\.city_hall\\PPS\\README.md", "D:\\.city_hall\\AAMHS\\README.md", "D:\\.city_hall\\ARHS\\README.md"]
 inherits_from = "..\\DRS.manifest.toml"
 
 [lifecycle]
