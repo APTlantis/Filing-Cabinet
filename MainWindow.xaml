@@ -933,6 +933,10 @@
                                             <ColumnDefinition Width="56" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
+                                        <Border Width="4"
+                                                HorizontalAlignment="Left"
+                                                Background="{Binding IconBrush}"
+                                                CornerRadius="3,0,0,3" />
                                         <Ellipse Width="44" Height="44" Fill="{Binding IconBackground}" VerticalAlignment="Center" />
                                         <TextBlock Text="{Binding Icon}" Style="{StaticResource IconText}" Foreground="{Binding IconBrush}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -957,7 +961,7 @@
                             <ColumnDefinition Width="0.95*" MinWidth="360" />
                         </Grid.ColumnDefinitions>
 
-                        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource PanelBorder}">
+                        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource PanelBorder}" BorderBrush="{StaticResource Atl.Brush.Archive}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="230" MinHeight="230" />
@@ -1036,7 +1040,7 @@
                             </Grid>
                         </Border>
 
-                        <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource PanelBorder}">
+                        <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource PanelBorder}" BorderBrush="{StaticResource Atl.Brush.IntentInfo}">
                             <StackPanel Margin="16">
                                 <TextBlock Text="RECENT ACTIVITY" Foreground="{StaticResource Atl.Brush.Archive}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,18" />
                                 <ItemsControl ItemsSource="{Binding Activities}">
@@ -1062,13 +1066,13 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource PanelBorder}">
+                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource PanelBorder}" BorderBrush="{StaticResource Atl.Brush.BorderStrong}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="40" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" Margin="16,0">
+                                <Grid Grid.Row="0" Margin="16,0" Background="{StaticResource Atl.Brush.PanelBlue}">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding FilterTitle}" Style="{StaticResource SectionTitle}" VerticalAlignment="Center" />
                                         <Button Content="Clear" Command="{Binding ClearFiltersCommand}" Style="{StaticResource ToolButton}" Height="26" Margin="12,0,0,0" Padding="10,0" />
@@ -1146,7 +1150,7 @@
                     </Border>
                 </Grid>
 
-                <Border Grid.Column="2" Background="{StaticResource PanelBgBrush}" BorderBrush="{StaticResource BorderDimBrush}" BorderThickness="1,0,0,0">
+                <Border Grid.Column="2" Background="{StaticResource Atl.Brush.CanvasRecessed}" BorderBrush="{StaticResource Atl.Brush.Archive}" BorderThickness="1,0,0,0">
                     <Grid Margin="12,14">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
