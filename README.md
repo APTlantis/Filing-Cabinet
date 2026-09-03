@@ -21,18 +21,19 @@ Current Windows package evidence:
 - Store publisher: `CN=81D6747D-F84F-4EFF-ACAA-9635D91ACCD0`
 - Store ID: `9N29X9KR70R3`
 - Current package manifest version: `0.1.2.1`, X64
-- Historical Store-accepted MSIX evidence: `trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
+- Local 0.1.2.1 MSIX candidate: `trust/Aptlantis.FilingCabinet_0.1.2.1_x64.msix`
 - Device family: Windows.Desktop, min version `10.0.18362.0`
 - Language: `en-us`
-- Capabilities: `runFullTrust`, `Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe`
-- Store-reported file size: `9.4 MB`
-- ARHS hash manifest: `trust/FileCabinet-0.1.2.0.hashmanifest.toml`
-- Detached manifest signatures: `trust/FileCabinet-0.1.2.0.hashmanifest.toml.asc` and `trust/FileCabinet-0.1.2.0.hashmanifest.toml.sphincs`
+- Capabilities: `runFullTrust`
+- Local candidate size: `9,942,060` bytes
+- ARHS hash manifest: `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml`
+- Detached manifest signatures: `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.asc` and `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.sphincs`
+- WACK evidence: `trust/Filing-Cabinnet v0.1.2.1 WACK.xml` (`OVERALL_RESULT=PASS`)
 - Public Windows distribution: Microsoft Store listing
 - Public Windows signing authority: Microsoft Store signs the distributed package
 - Historical/local MSI evidence: `artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi`
 
-`Package.appxmanifest` follows the Store identity/display pattern, and the supplied listing capture shows Filing Cabinet available in Microsoft Store. `Aptlantis.FilingCabinet_0.1.2.0_x64.msix` and its signed hash manifest remain historical package-acceptance and preservation evidence. The detached PGP and SLH-DSA files sign the ARHS hash manifest; they do not replace Microsoft Store signing for public MSIX distribution.
+`Package.appxmanifest` follows the Store identity/display pattern, and the supplied listing capture shows Filing Cabinet available in Microsoft Store. The local `Aptlantis.FilingCabinet_0.1.2.1_x64.msix` matches its recorded SHA-256 and passed WACK on 2026-09-02. That is not Partner Center acceptance, Store certification, or proof of Microsoft Store signing; the detached PGP and SLH-DSA files sign the ARHS hash manifest only. The retained 0.1.2.0 package in `trust/previous/` remains the historical Partner Center acceptance record.
 
 This release keeps the mature vault workflow: Vault Health has its own workspace, default analysis is metadata-first, large-file hash reads stay explicit, and bulk repair selection remains available for large repair lists. Current builds also combine Preview and Relations in the right panel, group hash settings by purpose, and start new catalogs with SHA-256 only unless the operator opts into additional hashes.
 

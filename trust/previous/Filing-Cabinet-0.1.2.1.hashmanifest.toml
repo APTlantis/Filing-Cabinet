@@ -1,0 +1,20 @@
+# Release Hash Manifest
+
+[release]
+name = "Filing Cabinet"
+version = "0.1.2.1"
+artifact = "Aptlantis.FilingCabinet_0.1.2.1_x64.msix"
+path = "D:\\DRS\\Filing Cabinet\\Aptlantis.FilingCabinet_0.1.2.1_x64.msix"
+size_bytes = 9942060
+
+[[hash]]
+algorithm = "SHA256"
+value = "01c2da991ba0b20fc172c6edac6e467f839e5f2e73d3eaf13966de05879c6ca1"
+
+[[hash]]
+algorithm = "BLAKE3-256"
+value = "6f44b2a4bdf8f96ff3bc9cb93b8939db29b54dcc1184ef1899429324b76f0bbc"
+
+[[hash]]
+algorithm = "KT128"
+value = "ZAUc9dpchMhSbNVFCfc86iLyANLFOcIV11ft1YlSbtEVgivG4dKvUzEtWu/0a1TYDURxDnqFcO4ZPVR2ZExQIQwcUWQEFm9+Kufey8ZxR0Rwc7l9VLhCP3IKkw+4XFSYu/LPVR2cl50lk83Ao9pK9c0kSpWCALtKqsUqPyiHUHk="

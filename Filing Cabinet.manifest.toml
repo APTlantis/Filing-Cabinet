@@ -104,10 +104,11 @@ external_dependencies = [
 
 [artifacts]
 produces = [
-  "trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix",
-  "trust/FileCabinet-0.1.2.0.hashmanifest.toml",
-  "trust/FileCabinet-0.1.2.0.hashmanifest.toml.asc",
-  "trust/FileCabinet-0.1.2.0.hashmanifest.toml.sphincs",
+  "trust/Aptlantis.FilingCabinet_0.1.2.1_x64.msix",
+  "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml",
+  "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.asc",
+  "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.sphincs",
+  "trust/Filing-Cabinnet v0.1.2.1 WACK.xml",
   "artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi",
   "artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml",
   "Package.appxmanifest",
@@ -164,27 +165,26 @@ store_submission_status = "store-available"
 planned_submission_method = "Partner Center website upload for first submission"
 package_acceptance_status = "Partner Center accepted Aptlantis.FilingCabinet_0.1.2.0_x64.msix as version 0.1.2.0, X64, Windows.Desktop min version 10.0.18362.0, language en-us, capabilities runFullTrust and Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe, file size 9.4 MB."
 latest_acceptance_package = "Aptlantis.FilingCabinet_0.1.2.0_x64.msix"
-notes = "Filing Cabinet is available through the Microsoft Store under the Filing Cabinet / Aptlantis.FilingCabinet identity. The supplied Store listing capture is public-availability evidence. Aptlantis.FilingCabinet_0.1.2.0_x64.msix remains the retained historical package-acceptance record; Package.appxmanifest now declares version 0.1.2.1."
+notes = "Filing Cabinet is available through the Microsoft Store under the Filing Cabinet / Aptlantis.FilingCabinet identity. The supplied Store listing capture is public-availability evidence. Aptlantis.FilingCabinet_0.1.2.0_x64.msix remains the retained historical package-acceptance record. The local 0.1.2.1 candidate is hash-recorded and passed WACK; it is not recorded as Partner Center accepted or Store-distributed."
 
 [release.msix_store_candidate]
-path = "trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix"
+path = "trust/Aptlantis.FilingCabinet_0.1.2.1_x64.msix"
 runtime = "win-x64"
-package_version = "0.1.2.0"
-size_bytes = 9922897
-store_reported_size = "9.4 MB"
-sha256 = "32f2212336d6d0d5f66b3162fdcb548cb7d4718bfd18d5ecb79af09c6985cdf2"
-blake3 = "06275140402bc6b0f19dccaa44587cc34d500d239bfa62ba6d6adaf3643ec195"
-kt128 = "u0l+QomJdPGRzGih+DuxVmmS+kZXKOeIaDCYMg813JJHDHZSoEFMNNMKqVYO3qCmcCI6aTXdW6W0t1yyJgrx47vdgtFZt1CSlKz14+djjEX7KVVaV8dUTGomDNSLszDl+1I6+p3XeF/IBv11kZvtfDtAdf9VmTTPBsFLR+vAat4="
-hash_manifest = "trust/FileCabinet-0.1.2.0.hashmanifest.toml"
+package_version = "0.1.2.1"
+size_bytes = 9942060
+sha256 = "01c2da991ba0b20fc172c6edac6e467f839e5f2e73d3eaf13966de05879c6ca1"
+blake3 = "6f44b2a4bdf8f96ff3bc9cb93b8939db29b54dcc1184ef1899429324b76f0bbc"
+kt128 = "ZAUc9dpchMhSbNVFCfc86iLyANLFOcIV11ft1YlSbtEVgivG4dKvUzEtWu/0a1TYDURxDnqFcO4ZPVR2ZExQIQwcUWQEFm9+Kufey8ZxR0Rwc7l9VLhCP3IKkw+4XFSYu/LPVR2cl50lk83Ao9pK9c0kSpWCALtKqsUqPyiHUHk="
+hash_manifest = "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml"
 package_manifest = "Package.appxmanifest"
-distribution = "Microsoft Store MSIX public distribution"
-signing = "Microsoft Store signs the distributed package; detached signatures cover the historical hash manifest only"
+distribution = "local Microsoft Store submission candidate"
+signing = "detached signatures cover the local ARHS hash manifest; Microsoft Store signing applies only after Store distribution"
 store_identity_aligned = true
-store_acceptance = "accepted by Partner Center package validation for Windows.Desktop"
+store_acceptance = "not recorded; retained 0.1.2.0 package acceptance is separate historical evidence"
 device_families = "Windows.Desktop min version 10.0.18362.0"
 languages = ["en-us"]
-capabilities = ["runFullTrust", "Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe"]
-status = "historical accepted Store package candidate; public availability is recorded separately by the Microsoft Store listing capture"
+capabilities = ["runFullTrust"]
+status = "local package candidate passed the full WACK run on 2026-09-02; not Partner Center acceptance, Store certification, or Store-distributed-package evidence"
 
 [release.installer]
 status = "historical-local-direct-distribution-evidence"
@@ -199,29 +199,30 @@ hash_manifest = "artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml
 signing = "unsigned; Get-AuthenticodeSignature reported NotSigned on 2026-08-20"
 
 [release.signatures.pq]
-path = "trust/FileCabinet-0.1.2.0.hashmanifest.toml.sphincs"
+path = "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.sphincs"
 algorithm = "SLH-DSA"
-size_bytes = 39996
-sha256 = "540E9F89618207314039530C4A67B9AAD14D4D2F8C4677AEAEC45C55AE0B288E"
+size_bytes = 39999
+sha256 = "9C259A2092BB61C3E163171F10484F74D986F13EDDB576E8E17865B2F43E1D3D"
 status = "detached post-quantum signature for the ARHS hash manifest; AAMHS/archive-preservation evidence, not Microsoft Store package signing"
 
 [release.signatures.pgp]
-path = "trust/FileCabinet-0.1.2.0.hashmanifest.toml.asc"
+path = "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.asc"
 algorithm = "PGP"
 size_bytes = 300
-sha256 = "97AAF2F74F74748A6F05DB61FE94EB7CEDE85F2F0F6C3AF44C9DBAC2377844ED"
+sha256 = "A0101856233E8F762A644168A16775ADABF2DA397A07022CCE5AA8F4586FFFB5"
 status = "detached PGP signature for the ARHS hash manifest; AAMHS/archive-preservation evidence, not Microsoft Store package signing"
-detail = "The detached PGP signature signs trust/FileCabinet-0.1.2.0.hashmanifest.toml."
+detail = "The detached PGP signature signs trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml."
 
 [release.verified]
-date = "2026-08-20"
-tests = "dotnet test FilingCabinet.Tests/FilingCabinet.Tests.vbproj --configuration Release --no-restore exited 0 on 2026-08-20"
+date = "2026-09-02"
+tests = "dotnet test FilingCabinet.Tests/FilingCabinet.Tests.vbproj --configuration Release --no-restore -p:BaseOutputPath=.verify-test\\ -p:UseAppHost=false passed 106/106 on 2026-09-02 with normal AppData access"
 installer_build = "installer/build-installer.ps1 -Version 0.1.1.0 completed on 2026-08-20 after clean restore/publish/package run"
 install_check = "not rerun for the Store candidate by Codex; prior v0.1.0 MSI lifecycle verification remains historical evidence"
 data_safety = "v0.1.1 work updates release metadata, documentation payload, and installer artifact; no vault data migration is included"
 release_hashing = "Release Hasher wrote artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml for artifacts/installer/FilingCabinet-0.1.1.0-win-x64.msi with SHA-256 0e0a9448ff3746143d3fd4a01e7fd754c6c24e63d3bd2b0127e5980da226640d, BLAKE3-256 0ea3ca698909bb293b4d6c9cd2229120913fabe140916beddbb725fcaf18b003, and KT128"
-msix_hashing = "Release Hasher wrote trust/FileCabinet-0.1.2.0.hashmanifest.toml for trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix with SHA-256 32f2212336d6d0d5f66b3162fdcb548cb7d4718bfd18d5ecb79af09c6985cdf2, BLAKE3-256 06275140402bc6b0f19dccaa44587cc34d500d239bfa62ba6d6adaf3643ec195, and KT128"
-release_signing = "trust/FileCabinet-0.1.2.0.hashmanifest.toml has detached PGP and SLH-DSA signatures for preservation/provenance evidence; Microsoft Store signing remains the authority for the publicly distributed MSIX after certification/publication"
+msix_hashing = "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml records trust/Aptlantis.FilingCabinet_0.1.2.1_x64.msix with SHA-256 01c2da991ba0b20fc172c6edac6e467f839e5f2e73d3eaf13966de05879c6ca1, BLAKE3-256 6f44b2a4bdf8f96ff3bc9cb93b8939db29b54dcc1184ef1899429324b76f0bbc, and KT128"
+release_signing = "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml has detached PGP and SLH-DSA signatures for preservation/provenance evidence; Microsoft Store signing remains the authority for a Store-distributed MSIX"
+wack = "trust/Filing-Cabinnet v0.1.2.1 WACK.xml records a complete UI validation run with OVERALL_RESULT=PASS on 2026-09-02"
 
 [[datasets]]
 name = "Filing Cabinet catalog"
@@ -303,7 +304,7 @@ stability = "stable"
 active_development = false
 known_gaps = [
   "Filing Cabinet is available through the Microsoft Store under Store ID 9N29X9KR70R3; the supplied listing capture is availability evidence.",
-  "The retained 0.1.2.0 candidate hash set is historical. The active Package.appxmanifest declares 0.1.2.1 and does not yet have a matching recorded ARHS manifest in this project.",
+  "The local 0.1.2.1 candidate has matching ARHS and WACK-pass evidence, but no Partner Center acceptance, Microsoft Store signing, or Store-distributed-package inspection is recorded for it.",
   "The renamed Windows GUI line should install user-facing application data and documentation under Filing Cabinet names; earlier MSI lifecycle evidence predates the full product rename and remains historical/local direct-distribution evidence.",
   "The historical v1.x installer train is preserved as pre-standard evidence and is not the active governed release line."
 ]
@@ -319,7 +320,7 @@ notes = "Current Windows distribution authority is the Microsoft Store listing f
 
 [verification]
 level = "store-available-operator-evidence"
-evidence = "Microsoft Store listing capture for Filing Cabinet; Package.appxmanifest aligned to Store identity/display values and version 0.1.2.1; retained 0.1.2.0 package-acceptance and ARHS hash evidence; prior dotnet build/test evidence; v0.1.1 MSI evidence retained as historical local/direct-distribution evidence"
+evidence = "Microsoft Store listing capture for Filing Cabinet; local 0.1.2.1 MSIX hash manifest, detached signatures, and full WACK PASS; retained 0.1.2.0 Partner Center package-acceptance evidence; 106/106 current tests; v0.1.1 MSI evidence retained as historical local/direct-distribution evidence"
 reviewed = "2026-08-26"
 build_verified = true
 tests_verified = true
@@ -327,7 +328,7 @@ artifact_verified = true
 release_verified = true
 
 [automation]
-build = "dotnet restore; dotnet test FilingCabinet.Tests/FilingCabinet.Tests.vbproj --configuration Release --no-restore; installer/build-msix.ps1; D:\\CTS\\Release Hasher\\cmd\\release-hasher\\release-hasher.exe --project-name FileCabinet --version 0.1.2.0 --output trust\\FileCabinet-0.1.2.0.hashmanifest.toml --overwrite trust\\Aptlantis.FilingCabinet_0.1.2.0_x64.msix"
+build = "dotnet restore; dotnet test FilingCabinet.Tests/FilingCabinet.Tests.vbproj --configuration Release --no-restore; installer/build-msix.ps1; D:\\CTS\\Release Hasher\\cmd\\release-hasher\\release-hasher.exe --project-name Filing-Cabinet --version 0.1.2.1 --output trust\\Filing-Cabinet-0.1.2.1.hashmanifest.toml --overwrite trust\\Aptlantis.FilingCabinet_0.1.2.1_x64.msix"
 deploy = "Filing Cabinet is available through the Microsoft Store for Store ID 9N29X9KR70R3. For future updates, record the submitted package hash, Store status, and any distributed-package inspection separately."
 tasks = [
   "Run unit tests",
@@ -384,8 +385,8 @@ current_highlights = [
   "Project licensing is now MIT with the full license in LICENSE and a source docs pointer in docs/Filing Cabinet - License.md; the installer script includes LICENSE on the next MSI build",
   "Filing Cabinet v0.1.1 is a compliance alignment patch that synchronizes MIT licensing, Release Hasher output, canonical documentation payload, release note, checklist, manifests, and installer identity",
   "FilingCabinet-0.1.1.0-win-x64.msi was rebuilt and hashed on 2026-08-20 with Release Hasher output in artifacts/installer/FilingCabinet_msi-0.1.1.0.hashmanifest.toml",
-  "Aptlantis.FilingCabinet_0.1.2.0_x64.msix is the historical Store-accepted candidate and is hashed by trust/FileCabinet-0.1.2.0.hashmanifest.toml with SHA-256, BLAKE3-256, and KT128",
-  "trust/FileCabinet-0.1.2.0.hashmanifest.toml has detached PGP and SLH-DSA signatures for AAMHS/archive-preservation evidence",
+  "Aptlantis.FilingCabinet_0.1.2.1_x64.msix is the local WACK-passed candidate and is hashed by trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml with SHA-256, BLAKE3-256, and KT128",
+  "trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml has detached PGP and SLH-DSA signatures for AAMHS/archive-preservation evidence",
   "Microsoft Partner Center reserved the Store product identity Filing Cabinet with Package/Identity/Name Aptlantis.FilingCabinet, Publisher CN=81D6747D-F84F-4EFF-ACAA-9635D91ACCD0, PFN Aptlantis.FilingCabinet_jfrcsngvdwx7g, and Store ID 9N29X9KR70R3",
   "Partner Center accepted Aptlantis.FilingCabinet_0.1.2.0_x64.msix as version 0.1.2.0, X64, Windows.Desktop min version 10.0.18362.0, language en-us, capabilities runFullTrust and Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe, file size 9.4 MB",
   "Package.appxmanifest now registers packaged File Explorer context-menu commands backed by FilingCabinetShellExtension.dll; the accepted 2026-08-20 MSIX must be rebuilt and rehashed before that shell integration is release evidence",
@@ -417,6 +418,6 @@ design_boundaries = [
   "Inspectable metadata over opaque ranking",
   "Repairable local vault state over cloud dependency"
 ]
-last_verified = "On 2026-08-26, operator-provided Microsoft Store listing capture showed Filing Cabinet available with an Open action. Package.appxmanifest declares version 0.1.2.1. The retained 0.1.2.0 Partner Center acceptance, hash manifest, detached-signature, build, and test records remain historical package evidence."
+last_verified = "On 2026-09-02, the local Aptlantis.FilingCabinet_0.1.2.1_x64.msix matched its SHA-256 hash manifest and completed a full WACK run with OVERALL_RESULT=PASS. This is local package evidence, separate from the retained 0.1.2.0 Partner Center acceptance and Store-distributed-package evidence."
 
 

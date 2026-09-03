@@ -1,5 +1,16 @@
 # Filing Cabinet Release Checklist
 
+## v0.1.2.1 Local MSIX Verification Record
+
+- [x] Package identity is `Aptlantis.FilingCabinet`, version `0.1.2.1`, X64.
+- [x] Local candidate exists at `trust/Aptlantis.FilingCabinet_0.1.2.1_x64.msix`.
+- [x] SHA-256 matches `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml`: `01C2DA991BA0B20FC172C6EDAC6E467F839E5F2E73D3EAF13966DE05879C6CA1`.
+- [x] Detached PGP and SLH-DSA signatures exist for the 0.1.2.1 hash manifest.
+- [x] `trust/Filing-Cabinnet v0.1.2.1 WACK.xml` records a complete WACK UI run with `OVERALL_RESULT=PASS` on 2026-09-02.
+- [ ] Partner Center acceptance recorded for this exact package.
+- [ ] Microsoft-signed Store-distributed package inspected for this exact package.
+- [ ] Final distributed-package install, launch, data-safety, and recovery checks completed.
+
 ## v0.1.2 Store MSIX Release Record
 
 - [x] Package identity uses `Aptlantis.FilingCabinet`.

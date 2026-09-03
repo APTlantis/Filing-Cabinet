@@ -25,16 +25,17 @@ The public Windows release path is MSIX through the Microsoft Store, where the S
 - Package family name: `Aptlantis.FilingCabinet_jfrcsngvdwx7g`
 - Store ID: `9N29X9KR70R3`
 
-The supplied Store listing capture confirms the public availability of Filing Cabinet. The retained `Aptlantis.FilingCabinet_0.1.2.0_x64.msix` package was accepted by Partner Center package validation as version `0.1.2.0`, X64, Windows.Desktop min version `10.0.18362.0`, language `en-us`, with capabilities `runFullTrust` and `Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe`, reported size `9.4 MB`. That retained package evidence is historical; the active manifest declares package version `0.1.2.1`.
+The supplied Store listing capture confirms the public availability of Filing Cabinet. The retained `Aptlantis.FilingCabinet_0.1.2.0_x64.msix` package was accepted by Partner Center package validation as version `0.1.2.0`, X64, Windows.Desktop min version `10.0.18362.0`, language `en-us`, with capabilities `runFullTrust` and `Microsoft.storeFilter.core.notSupported_8wekyb3d8bbwe`, reported size `9.4 MB`. That retained package evidence is historical. The local `0.1.2.1` MSIX has matching hash evidence and a full WACK pass, but no Partner Center acceptance or Store-distributed-package inspection is recorded for it.
 
-Historical Store-package evidence:
+Current local 0.1.2.1 package evidence:
 
-- MSIX package: `trust/Aptlantis.FilingCabinet_0.1.2.0_x64.msix`
-- ARHS hash manifest: `trust/FileCabinet-0.1.2.0.hashmanifest.toml`
-- Detached PGP signature: `trust/FileCabinet-0.1.2.0.hashmanifest.toml.asc`
-- Detached SLH-DSA signature: `trust/FileCabinet-0.1.2.0.hashmanifest.toml.sphincs`
+- MSIX package: `trust/Aptlantis.FilingCabinet_0.1.2.1_x64.msix`
+- ARHS hash manifest: `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml`
+- Detached PGP signature: `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.asc`
+- Detached SLH-DSA signature: `trust/Filing-Cabinet-0.1.2.1.hashmanifest.toml.sphincs`
+- WACK report: `trust/Filing-Cabinnet v0.1.2.1 WACK.xml` (`OVERALL_RESULT=PASS`)
 
-The detached PGP and SLH-DSA files sign the hash manifest for preservation/provenance evidence. They do not replace Microsoft Store signing for the public MSIX distribution.
+The detached PGP and SLH-DSA files sign the hash manifest for preservation/provenance evidence. They do not replace Microsoft Store signing for the public MSIX distribution. The signed hash manifest’s internal `path` retains the packager-provided location without the `trust` segment; its artifact filename, recorded size, and SHA-256 match the package retained at the path above.
 
 The v0.1.0 local release was verified on 2026-08-04 with source build, 104 passing tests, WiX MSI packaging, SHA-256 hashing, unsigned Authenticode status, and launch verification from the published executable. The MSI lifecycle was later verified on 2026-08-17 with quiet install, shell integration checks, installed CLI version, installed WPF launch, installed documentation payload, and quiet uninstall cleanup. That MSI record remains historical/local direct-distribution evidence.
 
